@@ -10,9 +10,26 @@
 		8011ED9E2E5C651D003EDF54 /* Mu0Hae.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mu0Hae.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B91803712E5ECF7D00B0AF90 /* Exceptions for "Mu0Hae" folder in "Mu0Hae" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+				"Resources/Fonts/Pretendard-Bold.otf",
+				"Resources/Fonts/Pretendard-Medium.otf",
+				"Resources/Fonts/Pretendard-Regular.otf",
+				"Resources/Fonts/Pretendard-SemiBold.otf",
+			);
+			target = 8011ED9D2E5C651D003EDF54 /* Mu0Hae */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8011EDA02E5C651D003EDF54 /* Mu0Hae */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				B91803712E5ECF7D00B0AF90 /* Exceptions for "Mu0Hae" folder in "Mu0Hae" target */,
+			);
 			path = Mu0Hae;
 			sourceTree = "<group>";
 		};
@@ -254,7 +271,7 @@
 				DEVELOPMENT_TEAM = KGMAZD32DG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Mu0Hae/App/Resources/Info.plist;
+				INFOPLIST_FILE = Mu0Hae/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "음성 메시지를 녹음하기 위해 마이크 접근이 필요합니다";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "음성을 텍스트로 변환하기 위해 음성 인식이 필요합니다";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -291,7 +308,7 @@
 				DEVELOPMENT_TEAM = KGMAZD32DG;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Mu0Hae/App/Resources/Info.plist;
+				INFOPLIST_FILE = Mu0Hae/Info.plist;
 				INFOPLIST_KEY_NSMicrophoneUsageDescription = "음성 메시지를 녹음하기 위해 마이크 접근이 필요합니다";
 				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "음성을 텍스트로 변환하기 위해 음성 인식이 필요합니다";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

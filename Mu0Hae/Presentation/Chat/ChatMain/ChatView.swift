@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ChatView: View {
+    @Environment(MainCoordinator.self) private var coordiinator
     @StateObject private var viewModel: ChatViewModel
     @Environment(\.injected) private var injected: DIContainer
     
@@ -71,7 +72,9 @@ struct ChatView: View {
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {}) {
+                    Button(action: {
+                        coordiinator.push(.guestSelection)
+                    }) {
                         Image(systemName: "line.3.horizontal")
                             .foregroundColor(.primary)
                     }

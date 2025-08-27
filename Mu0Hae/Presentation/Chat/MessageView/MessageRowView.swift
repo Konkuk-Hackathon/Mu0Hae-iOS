@@ -20,6 +20,8 @@ struct MessageRowView: View {
                 Spacer()
             }
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(message.user.isCurrentUser ? "내가 보낸 메시지" : "\(message.user.name)가 보낸 메시지")
     }
 }
 

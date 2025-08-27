@@ -23,17 +23,17 @@ struct ChatInputView: View {
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
             // Text Input Field
-            HStack(alignment: .top, spacing: 8) {
+            HStack(alignment: .center, spacing: 8) {
                 TextField("내용을 입력하세요.", text: $viewModel.currentText, axis: .vertical)
                     .muFont(.body1)
                     .lineLimit(1...4)
                     .focused($isTextFieldFocused)
                 
-                // TODO: Recording
                 Button(action: {
-                    //
+                    viewModel.toggleRecording()
                 }) {
-                    
+                    Image("icMic")
+                        .foregroundColor(viewModel.isRecording ? .muPrimary : .muBackground)
                 }
             }
             .padding(.horizontal, 16)
@@ -54,11 +54,11 @@ struct ChatInputView: View {
                         .background(Color.green)
                         .clipShape(Circle())
                 } else {
-                    Image(systemName: "arrow.up")
+                    Image("icSend")
                         .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(Color.muBackground)
                         .frame(width: 44, height: 44)
-                        .background(viewModel.isValidText ? Color.green : Color.gray)
+                        .background(viewModel.isValidText ? .muPrimary : .muPlaceHolder)
                         .clipShape(Circle())
                 }
             }

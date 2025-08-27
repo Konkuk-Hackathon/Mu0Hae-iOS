@@ -16,7 +16,6 @@ final class DefaultChatRepository: ChatRepository {
     
     func sendMessage(_ message: String, conversationId: String, guestType: GuestType) async throws -> ChatEntity {
         let requestDTO = ChatRequestDTO(
-            conversationId: conversationId,
             message: message,
             guestCode: guestType.rawValue
         )

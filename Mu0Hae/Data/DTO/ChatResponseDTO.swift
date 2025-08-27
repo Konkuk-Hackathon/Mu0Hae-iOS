@@ -11,12 +11,10 @@ import Foundation
 struct ChatResponseDTO: Codable {
     let response: String
     let timeStamp: String?
-    let conversationId: String? // TODO: 추후 삭제될 속성
     
-    init(response: String, timeStamp: String? = nil, conversationId: String? = nil) {
+    init(response: String, timeStamp: String? = nil) {
         self.response = response
         self.timeStamp = timeStamp
-        self.conversationId = conversationId
     }
     
     func toChatEntity(guestType: GuestType) -> ChatEntity {
@@ -29,7 +27,6 @@ struct ChatResponseDTO: Codable {
         let createdAt = timeStamp?.toDate() ?? Date()
         
         return ChatEntity(
-            conversationId: conversationId ?? "",
             user: aiUser,
             text: response,
             createdAt: createdAt

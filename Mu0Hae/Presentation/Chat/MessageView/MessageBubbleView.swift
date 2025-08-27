@@ -37,7 +37,7 @@ struct MessageBubbleView: View {
             // AI Avatar
             if let guestType = message.user.guestType {
                 Circle()
-                    .fill(guestType == .ybj ? Color.red : Color.blue)
+                    .fill(guestType == .ubyung ? Color.red : Color.blue)
                     .frame(width: 32, height: 32)
                     .overlay(
                         Text(String(guestType.displayName.first ?? "?"))
@@ -62,7 +62,6 @@ struct MessageBubbleView: View {
 #Preview {
     let sampleUser = MessageUser(name: "테스트", isCurrentUser: true)
     let sampleMessage = ChatEntity(
-        conversationId: "test",
         user: sampleUser,
         text: "안녕하세요!"
     )

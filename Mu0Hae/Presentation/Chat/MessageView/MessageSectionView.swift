@@ -96,11 +96,11 @@ struct MessageSection {
 
 #Preview {
     let sampleUser1 = MessageUser(name: "나", isCurrentUser: true)
-    let sampleUser2 = MessageUser(name: "유병재", isCurrentUser: false, guestType: .ybj)
+    let sampleUser2 = MessageUser(name: "유병재", isCurrentUser: false, guestType: .ubyung)
     
     let sampleMessages = [
-        ChatEntity(conversationId: "test", user: sampleUser1, text: "안녕하세요!"),
-        ChatEntity(conversationId: "test", user: sampleUser2, text: "네, 안녕하세요! 오늘 기분이 어떠신가요?")
+        ChatEntity(user: sampleUser1, text: "안녕하세요!"),
+        ChatEntity(user: sampleUser2, text: "네, 안녕하세요! 오늘 기분이 어떠신가요?")
     ]
     
     MessageSectionView(

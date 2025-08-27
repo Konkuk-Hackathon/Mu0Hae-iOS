@@ -55,9 +55,8 @@ struct AIMessageView: View {
 }
 
 #Preview {
-    let sampleUser = MessageUser(name: "유병재", isCurrentUser: false, guestType: .ybj)
+    let sampleUser = MessageUser(name: "유병재", isCurrentUser: false, guestType: .ubyung)
     let sampleMessage = ChatEntity(
-        conversationId: "test",
         user: sampleUser,
         text: "안녕하세요! 오늘 기분은 어떠세요? 제 이름은 박성근이에요. 오늘 하루동안 이걸 만드느라 정신이 많이 없네요 츠하하하하"
     )

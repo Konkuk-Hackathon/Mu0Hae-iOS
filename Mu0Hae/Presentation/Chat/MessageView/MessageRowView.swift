@@ -24,9 +24,8 @@ struct MessageRowView: View {
 }
 
 #Preview {
-    let sampleUser = MessageUser(name: "테스트", isCurrentUser: false, guestType: .ybj)
+    let sampleUser = MessageUser(name: "테스트", isCurrentUser: false, guestType: .ubyung)
     let sampleMessage = ChatEntity(
-        conversationId: "test",
         user: sampleUser,
         text: "안녕하세요! 오늘 기분은 어떠세요?"
     )

@@ -23,5 +23,5 @@ struct GuestChangeNotificationView: View {
 }
 
 #Preview {
-    GuestChangeNotificationView(from: .ybj, to: .key)
+    GuestChangeNotificationView(from: .ubyung, to: .key)
 }

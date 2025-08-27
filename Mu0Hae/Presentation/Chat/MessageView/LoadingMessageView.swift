@@ -54,6 +54,6 @@ struct LoadingMessageView: View {
 }
 
 #Preview {
-    LoadingMessageView(guestType: .ybj)
+    LoadingMessageView(guestType: .ubyung)
         .padding()
 }

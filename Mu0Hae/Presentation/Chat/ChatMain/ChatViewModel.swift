@@ -12,7 +12,7 @@ import Combine
 final class ChatViewModel: ObservableObject {
     @Published var messages: [ChatEntity] = []
     @Published var currentText: String = ""
-    @Published var selectedGuestType: GuestType = .ybj
+    @Published var selectedGuestType: GuestType = .ubyung
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     
@@ -30,10 +30,9 @@ final class ChatViewModel: ObservableObject {
         )
     }
     
-    // MARK: - Message Actions  
+    // MARK: - Message Actions
     func sendMessage(_ messageText: String) -> AnyPublisher<Void, Error> {
         let userMessage = ChatEntity(
-            conversationId: conversationId,
             user: currentUser,
             text: messageText
         )
@@ -60,10 +59,6 @@ final class ChatViewModel: ObservableObject {
             )
             
             await MainActor.run {
-                // 새로운 conversationId가 있다면 업데이트
-                if !aiMessage.conversationId.isEmpty {
-                    self.conversationId = aiMessage.conversationId
-                }
                 self.messages.append(aiMessage)
                 self.isLoading = false
                 completion(.success(()))

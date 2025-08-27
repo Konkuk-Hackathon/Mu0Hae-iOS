@@ -21,7 +21,8 @@ struct GuestSelectionCard: View {
                 }
             
             VStack(spacing: 20) {
-                Circle()
+                guest.image
+                    .resizable()
                     .frame(width: 117, height: 117)
                     .foregroundStyle(Color.muSecondary)
                     .padding()

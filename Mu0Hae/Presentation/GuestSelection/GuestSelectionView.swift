@@ -39,6 +39,7 @@ struct GuestSelectionView: View {
             }
         }
         .background(Color.muBackground)
+        .navigationBarBackButtonHidden()
     }
 }
 

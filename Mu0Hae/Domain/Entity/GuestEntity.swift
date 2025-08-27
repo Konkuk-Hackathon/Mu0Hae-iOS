@@ -24,4 +24,11 @@ enum GuestEntity: CaseIterable {
         case .key: return "샤이니 T 아니고 키 입니다.\n노력해서 공감하겠습니다."
         }
     }
+    
+    var image: Image {
+        switch self {
+        case .ybj: Image(.ybj)
+        case .key: Image(.key)
+        }
+    }
 }

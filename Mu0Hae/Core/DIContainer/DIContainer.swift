@@ -33,25 +33,33 @@ struct DIContainer {
 extension DIContainer {
     struct Services {
         let chatNetwork: ChatNetworkService
+        let chatHistoryNetwork: ChatHistoryNetworkServiceProtocol
         
         static var live: Self {
-            .init(chatNetwork: ChatNetworkService())
+            .init(
+                chatNetwork: ChatNetworkService(),
+                chatHistoryNetwork: ChatHistoryNetworkService()
+            )
         }
     }
     
     struct Repositories {
         let chat: ChatRepository
+        let chatHistory: ChatHistoryRepository
         
         init(services: Services) {
             self.chat = DefaultChatRepository(chatService: services.chatNetwork)
+            self.chatHistory = DefaultChatHistoryRepository(chatHistoryService: services.chatHistoryNetwork)
         }
     }
     
     struct UseCases {
         let chat: ChatUseCase
+        let chatHistory: ChatHistoryUseCase
         
         init(repositories: Repositories) {
             self.chat = DefaultChatUseCase(chatRepository: repositories.chat)
+            self.chatHistory = DefaultChatHistoryUseCase(repository: repositories.chatHistory)
         }
     }
     

@@ -18,22 +18,15 @@ struct AIMessageView: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
-            // TODO: 이미지로 교체
             if let guestType = message.user.guestType {
-                Circle()
-                    .fill(Color(.systemGray6))
-                    .frame(width: 54, height: 54)
-                    .overlay(
-                        // TODO: 캐릭터 지정 시 교체
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 16))
-                            .foregroundColor(.gray)
-                    )
+                guestType.image
+                    .resizable()
+                    .frame(width: 46, height: 46)
             }
             
             // Message Content
             VStack(alignment: .leading, spacing: 4) {
-                HStack(alignment: .center, spacing: 8) {
+                HStack(alignment: .center, spacing: 0) {
                     if isLoading {
                         // Loading animation
                         HStack(spacing: 4) {
@@ -59,24 +52,23 @@ struct AIMessageView: View {
                         // Regular message
                         Text(message.text.forceCharWarpping)
                             .muFont(.body2)
-                            .foregroundColor(.primary)
-                            .padding(.horizontal, 16)
-                            .padding(.vertical, 12)
-                            .background(Color.muLightGray)
-                            .cornerRadius(18)
-                            .frame(maxWidth: 190, alignment: .leading)
+                            .foregroundColor(.muText)
+                            .padding(.horizontal, 20)
+                            .padding(.vertical, 10)
+                            .background(.muLightGray)
+                            .cornerRadius(14)
+                            .frame(maxWidth: 230, alignment: .leading)
                     }
                     
                     // Speaker Button (only show when not loading)
                     if !isLoading {
-                        Button(action: {
+                        Button {
                             // TODO: TTS
                             isPlaying.toggle()
-                        }) {
-                            Image(systemName: isPlaying ? "speaker.wave.2.fill" : "speaker.fill")
-                                .font(.system(size: 16))
-                                .foregroundColor(Color.muSubText)
-                                .frame(width: 24, height: 24)
+                        } label: {
+                            Image(.icSpeaker)
+                                .foregroundColor(.muSubText)
+                                .padding(4)
                         }
                     } else {
                         // Placeholder space when loading

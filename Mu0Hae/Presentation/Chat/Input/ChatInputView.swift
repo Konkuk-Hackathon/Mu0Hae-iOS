@@ -24,51 +24,55 @@ struct ChatInputView: View {
         HStack(alignment: .top, spacing: 8) {
             // Text Input Field
             HStack(alignment: .center, spacing: 8) {
-                TextField("내용을 입력하세요.", text: $viewModel.currentText, axis: .vertical)
-                    .muFont(.body1)
-                    .lineLimit(1...4)
-                    .focused($isTextFieldFocused)
+                TextField("마음 속 이야기를 적어주세요",
+                          text: $viewModel.currentText,
+                          axis: .vertical)
+                .foregroundStyle(.muText)
+                .muFont(.body1)
+                .lineLimit(1...4)
+                .focused($isTextFieldFocused)
                 
-                Button(action: {
+                Button {
                     viewModel.toggleRecording()
-                }) {
-                    Image(viewModel.isRecording ? "icMic" : "icMic_filled")
-                        .resizable()
-                        .frame(width: 28, height: 28)
-                        .foregroundColor(viewModel.isRecording ? .muPrimary : .muBackground)
+                } label: {
+                    Image(viewModel.isRecording ? .icMic : .icMic)
+                        .renderingMode(.template)
+                        .foregroundColor(.muPrimary)
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 11)
             .background(Color.muTextField)
-            .cornerRadius(22)
+            .cornerRadius(14)
             
             // Send Button (top aligned)
-            Button(action: {
+            Button {
                 viewModel.sendMessage()
                 isTextFieldFocused = false
-            }) {
+            } label: {
                 if viewModel.isSending {
                     ProgressView()
                         .scaleEffect(0.8)
                         .tint(.white)
                         .frame(width: 44, height: 44)
-                        .background(Color.green)
+                        .background(.muPrimary)
                         .clipShape(Circle())
                 } else {
-                    Image("icSend")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(Color.muBackground)
-                        .frame(width: 44, height: 44)
-                        .background(viewModel.isValidText ? .muPrimary : .muPlaceHolder)
-                        .clipShape(Circle())
+                    RoundedRectangle(cornerRadius: 14)
+                        .frame(width: 42, height: 42)
+                        .foregroundStyle(viewModel.isValidText ? .muPrimary : .muPlaceHolder)
+                        .overlay {
+                            Image(.icSend)
+                                .renderingMode(.template)
+                                .foregroundStyle(.muBackground)
+                        }
                 }
             }
             .disabled(!viewModel.isValidText || viewModel.isSending)
             .padding(4)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.horizontal, 15)
+        .padding(.vertical, 18)
         .background(Color(.systemBackground))
         .onAppear {
             setupBindings()

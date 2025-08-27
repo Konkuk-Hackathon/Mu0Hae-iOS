@@ -24,42 +24,53 @@ struct ChatView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                // Messages ScrollView
-                if viewModel.messages.isEmpty {
-                    // 화면 정중앙에 환영 메시지
-                    VStack {
-                        Spacer()
-                        Text("무조건 공감만 해드릴게요.\n대화를 시작해주세요.")
-                            .muFont(.body1)
-                            .multilineTextAlignment(.center)
-                            .foregroundColor(Color("muSubText"))
-                        Spacer()
-                    }
-                } else {
-                    // 실제 메시지 표시
-                    ScrollView {
-                        LazyVStack(spacing: 12) {
-                            ForEach(viewModel.messages) { message in
-                                MessageRowView(message: message)
-                                    .padding(.horizontal, 8)
-                            }
-                            
-                            // 로딩 상태일 때 빈 메시지로 AIMessageView 표시
-                            if viewModel.isLoading {
-                                let loadingUser = MessageUser(name: viewModel.selectedGuestType.displayName, isCurrentUser: false, guestType: viewModel.selectedGuestType)
-                                let loadingMessage = ChatEntity(user: loadingUser, text: "")
-                                MessageRowView(message: loadingMessage)
-                                    .padding(.horizontal, 8)
-                            }
+                Group {
+                    if viewModel.isLoadingHistory {
+                        // 채팅 기록 로딩 중
+                        VStack {
+                            Spacer()
+                            ProgressView("채팅 기록을 불러오는 중...")
+                                .muFont(.body2)
+                                .foregroundColor(Color("muSubText"))
+                            Spacer()
                         }
-                        .padding(.horizontal, 12)
+                    } else if viewModel.messages.isEmpty {
+                        // 화면 정중앙에 환영 메시지
+                        VStack {
+                            Spacer()
+                            Text("무조건 공감만 해드릴게요.\n대화를 시작해주세요.")
+                                .muFont(.body1)
+                                .multilineTextAlignment(.center)
+                                .foregroundColor(Color("muSubText"))
+                            Spacer()
+                        }
+                    } else {
+                        // 실제 메시지 표시
+                        ScrollView {
+                            LazyVStack(spacing: 12) {
+                                ForEach(viewModel.messages) { message in
+                                    MessageRowView(message: message)
+                                        .padding(.horizontal, 8)
+                                }
+                                
+                                // 로딩 상태일 때 빈 메시지로 AIMessageView 표시
+                                if viewModel.isLoading {
+                                    let loadingUser = MessageUser(name: viewModel.selectedGuestType.displayName, isCurrentUser: false, guestType: viewModel.selectedGuestType)
+                                    let loadingMessage = ChatEntity(user: loadingUser, text: "")
+                                    MessageRowView(message: loadingMessage)
+                                        .padding(.horizontal, 8)
+                                }
+                            }
+                            .padding()
+                            .rotationEffect(.degrees(180)).scaleEffect(x: -1, y: 1, anchor: .center)
+                        }
+                        .rotationEffect(.degrees(180)).scaleEffect(x: -1, y: 1, anchor: .center)
                     }
                 }
                 
-                // Fixed Input at Bottom
                 ChatInputView(chatViewModel: viewModel)
             }
-            .background(Color("muBackground"))
+            .background(Color.muBackground)
             .navigationBarTitleDisplayMode(.inline)
             .onTapGesture {
                 hideKeyboard()
@@ -81,6 +92,9 @@ struct ChatView: View {
                     }
                 }
             }
+            .onAppear {
+                viewModel.loadChatHistoryOnce(container: injected)
+            }
         }
     }
     
@@ -90,6 +104,8 @@ struct ChatView: View {
 }
 
 #Preview {
+    let container = DIContainer()
     ChatView()
-        .inject(DIContainer())
+        .inject(container)
+        .environment(MainCoordinator())
 }

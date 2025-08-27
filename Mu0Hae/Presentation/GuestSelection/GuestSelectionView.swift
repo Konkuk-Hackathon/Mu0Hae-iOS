@@ -8,14 +8,9 @@
 import SwiftUI
 
 struct GuestSelectionView: View {
-    
     private let itemWidth: CGFloat = (UIApplication.screenWidth - 25 * 3) / 2
-    private var columns: [GridItem] {
-        [
-            GridItem(.fixed(itemWidth)),
-            GridItem(.fixed(itemWidth))
-        ]
-    }
+    private var columns: [GridItem] { [GridItem(.fixed(itemWidth)),
+                                       GridItem(.fixed(itemWidth)) ] }
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -37,12 +32,14 @@ struct GuestSelectionView: View {
 }
 
 private struct GuestSelectionNavigationBarView: View {
+    @Environment(MainCoordinator.self) private var coordiinator
+    
     var body: some View {
         ZStack {
             HStack(spacing: 0) {
                 Image(.icBack)
                     .onTapGesture {
-                        // navigate Chat View
+                        coordiinator.pop()
                     }
                 Spacer()
             }

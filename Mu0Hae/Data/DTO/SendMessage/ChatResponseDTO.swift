@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - Response DTOs
+// MARK: - ChatResponse DTO
 struct ChatResponseDTO: Codable {
     let response: String
     let timeStamp: String?

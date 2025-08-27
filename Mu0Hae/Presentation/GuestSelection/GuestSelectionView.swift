@@ -8,11 +8,58 @@
 import SwiftUI
 
 struct GuestSelectionView: View {
+    @State var viewModel: GuestSelectionViewModel = .init()
+    
+    private let itemWidth: CGFloat = (UIApplication.screenWidth - 25 * 3) / 2
+    private var columns: [GridItem] { [GridItem(.fixed(itemWidth)),
+                                       GridItem(.fixed(itemWidth)) ] }
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack(alignment: .top) {
+            VStack(spacing: 0) {
+                GuestSelectionNavigationBarView()
+                
+                LazyVGrid(columns: columns, spacing: 25) {
+                    ForEach(GuestEntity.allCases, id: \.self) { guest in
+                        GuestSelectionCard(guest: guest)
+                            .onTapGesture {
+                                viewModel.selectedGuest = guest
+                                viewModel.showPopup()
+                            }
+                    }
+                }
+                .padding(.top, 25)
+                
+                Spacer()
+            }
+            
+            if viewModel.isShowingPopup {
+                GuestDescriptionPopup(viewModel: viewModel)
+                    .zIndex(1)
+            }
+        }
+        .background(Color.muBackground)
     }
 }
 
-#Preview {
-    GuestSelectionView()
+private struct GuestSelectionNavigationBarView: View {
+    @Environment(MainCoordinator.self) private var coordiinator
+    
+    var body: some View {
+        ZStack {
+            HStack(spacing: 0) {
+                Image(.icBack)
+                    .onTapGesture {
+                        coordiinator.pop()
+                    }
+                Spacer()
+            }
+            .frame(height: 56)
+            .padding(.horizontal, 20)
+            .background(Color.muBackground)
+            .overlay {
+                Image(.imgSettingTItle)
+            }
+        }
+    }
 }

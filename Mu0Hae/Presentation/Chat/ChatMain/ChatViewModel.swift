@@ -14,7 +14,9 @@ final class ChatViewModel: ObservableObject {
     @Published var currentText: String = ""
     @Published var selectedGuestType: GuestType = .ubyung
     @Published var isLoading: Bool = false
+    @Published var isLoadingHistory: Bool = false
     @Published var errorMessage: String?
+    @Published var hasLoadedHistory: Bool = false
     
     private var conversationId: String
     private let currentUser: MessageUser
@@ -68,6 +70,33 @@ final class ChatViewModel: ObservableObject {
                 self.errorMessage = error.localizedDescription
                 self.isLoading = false
                 completion(.failure(error))
+            }
+        }
+    }
+    
+    // MARK: - Chat History
+    func loadChatHistoryOnce(container: DIContainer) {
+        guard !hasLoadedHistory else { return }
+        hasLoadedHistory = true
+        isLoadingHistory = true
+        
+        Task {
+            do {
+                let threads = try await container.useCases.chatHistory.getChatHistory()
+                
+                // 가장 최근 스레드의 메시지들을 로드
+                if let latestThread = threads.first {
+                    await MainActor.run {
+                        self.messages = latestThread.messages
+                        self.conversationId = latestThread.conversationId
+                        self.isLoadingHistory = false
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    self.errorMessage = "채팅 기록을 불러올 수 없습니다: \(error.localizedDescription)"
+                    self.isLoadingHistory = false
+                }
             }
         }
     }

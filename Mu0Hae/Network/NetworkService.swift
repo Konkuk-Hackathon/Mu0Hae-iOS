@@ -12,7 +12,7 @@ class ChatNetworkService {
     private let session = URLSession.shared
     
     func sendChatMessage(_ request: ChatRequestDTO) async throws -> ChatResponseDTO {
-        guard let url = URL(string: "\(baseURL)/api/chat") else {
+        guard let url = URL(string: "\(baseURL)/api/chats") else {
             throw NetworkError.invalidURL
         }
         

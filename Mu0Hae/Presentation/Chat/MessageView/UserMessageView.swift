@@ -27,7 +27,6 @@ struct UserMessageView: View {
 #Preview {
     let sampleUser = MessageUser(name: "나", isCurrentUser: true)
     let sampleMessage = ChatEntity(
-        conversationId: "test",
         user: sampleUser,
         text: "안녕하세요!"
     )

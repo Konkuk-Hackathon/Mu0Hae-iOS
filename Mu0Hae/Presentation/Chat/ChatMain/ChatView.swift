@@ -38,7 +38,7 @@ struct ChatView: View {
                 } else {
                     // 실제 메시지 표시
                     ScrollView {
-                        LazyVStack(spacing: 0) {
+                        LazyVStack(spacing: 12) {
                             ForEach(viewModel.messages) { message in
                                 MessageRowView(message: message)
                                     .padding(.horizontal, 8)

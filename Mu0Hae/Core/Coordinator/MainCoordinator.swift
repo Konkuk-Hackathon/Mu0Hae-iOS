@@ -9,12 +9,18 @@ import SwiftUI
 
 typealias MainCoordinatorProtocol = Navigatable & SheetPresentable & FullScreenPresentable
 
+@MainActor
 @Observable
 final class MainCoordinator: MainCoordinatorProtocol {
     
     var path: [AppPage] = []
     var sheet: Sheet?
     var fullScreen: FullScreen?
+    private var container: DIContainer?
+    
+    func inject(_ container: DIContainer) {
+        self.container = container
+    }
     
     func push(_ page: AppPage) {
         path.append(page)
@@ -55,7 +61,12 @@ final class MainCoordinator: MainCoordinatorProtocol {
     func buildPage(_ page: AppPage) -> some View {
         switch page {
         case .chat:
-            ChatView()
+            if let container = container {
+                ChatView(viewModel: container.createViewModels().chatViewModel)
+            } else {
+                // TODO: 에러 처리
+                ChatView()
+            }
         case .guestSelection:
             GuestSelectionView()
         }

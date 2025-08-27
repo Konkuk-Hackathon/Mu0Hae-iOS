@@ -10,6 +10,7 @@ import SwiftUI
 struct CoordinatorView: View {
     
     @State private var coordinator = MainCoordinator()
+    @Environment(\.injected) private var injected: DIContainer
     
     var body: some View {
         NavigationStack(path: $coordinator.path) {
@@ -25,5 +26,8 @@ struct CoordinatorView: View {
                 }
         }
         .environment(coordinator)
+        .onAppear {
+            coordinator.inject(injected)
+        }
     }
 }

@@ -11,6 +11,7 @@ struct DIContainer {
     let repositories: Repositories
     let useCases: UseCases
     let services: Services
+    let viewModels: ViewModels?
     
     init(
         services: Services = .live,
@@ -20,6 +21,12 @@ struct DIContainer {
         self.services = services
         self.repositories = repositories ?? Repositories(services: services)
         self.useCases = useCases ?? UseCases(repositories: self.repositories)
+        self.viewModels = nil
+    }
+    
+    @MainActor
+    func createViewModels() -> ViewModels {
+        return ViewModels(useCases: self.useCases)
     }
 }
 
@@ -45,6 +52,15 @@ extension DIContainer {
         
         init(repositories: Repositories) {
             self.chat = DefaultChatUseCase(chatRepository: repositories.chat)
+        }
+    }
+    
+    @MainActor
+    struct ViewModels {
+        let chatViewModel: ChatViewModel
+        
+        init(useCases: UseCases) {
+            self.chatViewModel = ChatViewModel(chatUseCase: useCases.chat)
         }
     }
 }

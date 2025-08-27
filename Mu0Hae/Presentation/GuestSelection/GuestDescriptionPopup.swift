@@ -15,7 +15,8 @@ struct GuestDescriptionPopup: View {
             Color.black.opacity(0.5)
             
             VStack(spacing: 0) {
-                Circle()
+                viewModel.selectedGuest.image
+                    .resizable()
                     .frame(width: 86, height: 86)
                     .foregroundStyle(.muSecondary)
                     .padding(.bottom, 15)

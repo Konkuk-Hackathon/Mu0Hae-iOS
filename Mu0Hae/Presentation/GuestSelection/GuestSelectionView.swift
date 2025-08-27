@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct GuestSelectionView: View {
+    @State var viewModel: GuestSelectionViewModel = .init()
+    
     private let itemWidth: CGFloat = (UIApplication.screenWidth - 25 * 3) / 2
     private var columns: [GridItem] { [GridItem(.fixed(itemWidth)),
                                        GridItem(.fixed(itemWidth)) ] }
@@ -20,11 +22,17 @@ struct GuestSelectionView: View {
                 LazyVGrid(columns: columns, spacing: 25) {
                     ForEach(1...4, id: \.self) { _ in
                         GuestSelectionCard()
+                            .onTapGesture { viewModel.showPopup() }
                     }
                 }
                 .padding(.top, 25)
                 
                 Spacer()
+            }
+            
+            if viewModel.isShowingPopup {
+                GuestDescriptionPopup(viewModel: viewModel)
+                    .zIndex(1)
             }
         }
         .background(Color.muBackground)
@@ -51,8 +59,4 @@ private struct GuestSelectionNavigationBarView: View {
             }
         }
     }
-}
-
-#Preview {
-    GuestSelectionView()
 }

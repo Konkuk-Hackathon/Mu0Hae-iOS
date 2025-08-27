@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct GuestDescriptionPopup: View {
+    let viewModel: GuestSelectionViewModel
+    
     var body: some View {
         ZStack {
             Color.black.opacity(0.5)
@@ -32,11 +34,13 @@ struct GuestDescriptionPopup: View {
                 HStack(spacing: 20) {
                     GuestSelectionButton(title: "취소",
                                          fontColor: .muSubText,
-                                         backgroundColor: .muLightGray)
+                                         backgroundColor: .muLightGray,
+                                         action: { viewModel.hidePopup() } )
                     
                     GuestSelectionButton(title: "설정하기",
                                          fontColor: .muBackground,
-                                         backgroundColor: .muPrimary)
+                                         backgroundColor: .muPrimary,
+                                         action: { viewModel.hidePopup() } )
                 }
             }
             .padding(.horizontal, 20)
@@ -52,6 +56,7 @@ private struct GuestSelectionButton: View {
     var title: String
     var fontColor: Color
     var backgroundColor: Color
+    var action: () -> Void
     
     var body: some View {
         RoundedRectangle(cornerRadius: 8)
@@ -62,9 +67,6 @@ private struct GuestSelectionButton: View {
                     .muFont(.buttonTitle)
                     .foregroundStyle(fontColor)
             }
+            .onTapGesture { action() }
     }
-}
-
-#Preview {
-    GuestDescriptionPopup()
 }

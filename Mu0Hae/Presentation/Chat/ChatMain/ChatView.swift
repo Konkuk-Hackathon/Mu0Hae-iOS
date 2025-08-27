@@ -32,6 +32,8 @@ struct ChatView: View {
                             ProgressView("채팅 기록을 불러오는 중...")
                                 .muFont(.body2)
                                 .foregroundColor(Color("muSubText"))
+                                .accessibilityLabel("채팅 기록 로딩 중")
+                                .accessibilityHint("이전 대화 내역을 불러오고 있습니다")
                             Spacer()
                         }
                     } else if viewModel.messages.isEmpty {
@@ -42,6 +44,8 @@ struct ChatView: View {
                                 .muFont(.body1)
                                 .multilineTextAlignment(.center)
                                 .foregroundColor(Color("muSubText"))
+                                .accessibilityLabel("대화 시작 안내")
+                                .accessibilityHint("아래 입력 필드에서 메시지를 작성하여 대화를 시작하세요")
                             Spacer()
                         }
                     } else {
@@ -65,6 +69,8 @@ struct ChatView: View {
                             .rotationEffect(.degrees(180)).scaleEffect(x: -1, y: 1, anchor: .center)
                         }
                         .rotationEffect(.degrees(180)).scaleEffect(x: -1, y: 1, anchor: .center)
+                        .accessibilityLabel("채팅 메시지 목록")
+                        .accessibilityHint("위아래로 스크롤하여 대화 내용을 확인할 수 있습니다")
                     }
                 }
                 
@@ -81,6 +87,8 @@ struct ChatView: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 80)
+                        .accessibilityLabel("무해 앱 로고")
+                        .accessibilityHidden(true)
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
@@ -90,6 +98,8 @@ struct ChatView: View {
                         Image(systemName: "line.3.horizontal")
                             .foregroundColor(.primary)
                     }
+                    .accessibilityLabel("설정 메뉴")
+                    .accessibilityHint("탭하여 대화 상대를 변경할 수 있습니다")
                 }
             }
             .onAppear {

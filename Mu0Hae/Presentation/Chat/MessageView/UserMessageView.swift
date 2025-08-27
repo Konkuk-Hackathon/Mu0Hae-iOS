@@ -20,6 +20,8 @@ struct UserMessageView: View {
                 .background(Color.green)
                 .cornerRadius(18)
                 .frame(maxWidth: 190, alignment: .trailing)
+                .accessibilityLabel("내가 보낸 메시지")
+                .accessibilityValue(message.text)
         }
     }
 }

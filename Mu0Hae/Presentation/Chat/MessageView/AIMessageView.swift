@@ -29,6 +29,8 @@ struct AIMessageView: View {
                             .font(.system(size: 16))
                             .foregroundColor(.gray)
                     )
+                    .accessibilityLabel("\(message.user.name) 프로필 사진")
+                    .accessibilityHidden(true)
             }
             
             // Message Content
@@ -55,6 +57,8 @@ struct AIMessageView: View {
                         .background(Color.muLightGray)
                         .cornerRadius(18)
                         .frame(maxWidth: 190, alignment: .leading)
+                        .accessibilityLabel("\(message.user.name)가 답변을 작성 중입니다")
+                        .accessibilityHint("잠시 후 답변이 나타납니다")
                     } else {
                         // Regular message
                         Text(message.text.forceCharWarpping)
@@ -65,6 +69,8 @@ struct AIMessageView: View {
                             .background(Color.muLightGray)
                             .cornerRadius(18)
                             .frame(maxWidth: 190, alignment: .leading)
+                            .accessibilityLabel("\(message.user.name)의 메시지")
+                            .accessibilityValue(message.text)
                     }
                     
                     // Speaker Button (only show when not loading)
@@ -78,10 +84,13 @@ struct AIMessageView: View {
                                 .foregroundColor(Color.muSubText)
                                 .frame(width: 24, height: 24)
                         }
+                        .accessibilityLabel(isPlaying ? "음성 재생 중지" : "음성으로 듣기")
+                        .accessibilityHint(isPlaying ? "탭하여 음성 재생을 중지합니다" : "탭하여 메시지를 음성으로 들을 수 있습니다")
                     } else {
                         // Placeholder space when loading
                         Color.clear
                             .frame(width: 24, height: 24)
+                            .accessibilityHidden(true)
                     }
                 }
             }

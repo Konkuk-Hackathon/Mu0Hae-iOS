@@ -28,6 +28,9 @@ struct ChatInputView: View {
                     .muFont(.body1)
                     .lineLimit(1...4)
                     .focused($isTextFieldFocused)
+                    .accessibilityLabel("메시지 입력 필드")
+                    .accessibilityHint("메시지를 입력하거나 음성 녹음을 사용할 수 있습니다")
+                    .accessibilityValue(viewModel.currentText.isEmpty ? "비어있음" : viewModel.currentText)
                 
                 Button(action: {
                     viewModel.toggleRecording()
@@ -37,6 +40,8 @@ struct ChatInputView: View {
                         .frame(width: 28, height: 28)
                         .foregroundColor(viewModel.isRecording ? .muPrimary : .muBackground)
                 }
+                .accessibilityLabel(viewModel.isRecording ? "녹음 중지" : "음성 녹음 시작")
+                .accessibilityHint(viewModel.isRecording ? "탭하여 음성 녹음을 중지합니다" : "탭하여 음성으로 메시지를 입력할 수 있습니다")
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
@@ -65,6 +70,10 @@ struct ChatInputView: View {
                 }
             }
             .disabled(!viewModel.isValidText || viewModel.isSending)
+            .accessibilityLabel(viewModel.isSending ? "메시지 전송 중" : "메시지 전송")
+            .accessibilityHint(viewModel.isSending ? "메시지가 전송 중입니다" : 
+                               viewModel.isValidText ? "탭하여 메시지를 전송합니다" : "메시지를 입력하면 전송할 수 있습니다")
+            .accessibilityAddTraits(viewModel.isSending ? [] : .isButton)
             .padding(4)
         }
         .padding(.horizontal, 16)

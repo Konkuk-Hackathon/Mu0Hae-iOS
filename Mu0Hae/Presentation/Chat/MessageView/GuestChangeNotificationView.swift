@@ -19,6 +19,8 @@ struct GuestChangeNotificationView: View {
             .padding(.vertical, 4)
             .background(Color("muLightGray"))
             .cornerRadius(12)
+            .accessibilityLabel("대화 상대 변경 알림")
+            .accessibilityValue("대화 상대를 \(to.displayName)님으로 변경하였습니다")
     }
 }
 

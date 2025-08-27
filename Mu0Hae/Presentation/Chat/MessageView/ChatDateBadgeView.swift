@@ -24,6 +24,8 @@ struct ChatDateBadgeView: View {
             .padding(.horizontal, 12)
             .background(Color("muLightGray"))
             .cornerRadius(12)
+            .accessibilityLabel("날짜 구분선")
+            .accessibilityValue(date)
     }
 }
 

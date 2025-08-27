@@ -20,7 +20,6 @@ struct MessageRowView: View {
                 Spacer()
             }
         }
-        .padding(.horizontal, 16)
     }
 }
 

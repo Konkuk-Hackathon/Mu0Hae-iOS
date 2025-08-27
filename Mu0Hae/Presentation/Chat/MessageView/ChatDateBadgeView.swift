@@ -18,11 +18,11 @@ struct ChatDateBadgeView: View {
     
     var body: some View {
         Text(date)
-            .font(.custom("Pretendard-Regular", size: 12))
-            .foregroundColor(.gray)
+            .muFont(.body3)
+            .foregroundColor(Color("muSubText"))
             .padding(.vertical, 4)
             .padding(.horizontal, 12)
-            .background(Color(.systemGray6))
+            .background(Color("muLightGray"))
             .cornerRadius(12)
     }
 }

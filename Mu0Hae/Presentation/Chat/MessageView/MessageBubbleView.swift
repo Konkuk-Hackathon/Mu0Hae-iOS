@@ -24,16 +24,12 @@ struct MessageBubbleView: View {
     
     private var userMessageView: some View {
         Text(message.text)
-            .font(.custom("Pretendard-Regular", size: 16))
+            .muFont(.body1)
             .foregroundColor(.white)
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(Color.green)
+            .background(Color.muPrimary)
             .cornerRadius(18)
-            .overlay(
-                RoundedRectangle(cornerRadius: 18)
-                    .stroke(Color.green, lineWidth: 1)
-            )
     }
     
     private var aiMessageView: some View {
@@ -45,24 +41,19 @@ struct MessageBubbleView: View {
                     .frame(width: 32, height: 32)
                     .overlay(
                         Text(String(guestType.displayName.first ?? "?"))
-                            .font(.custom("Pretendard-Bold", size: 14))
+                            .muFont(.body3)
                             .foregroundColor(.white)
                     )
             }
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(message.text)
-                    .font(.custom("Pretendard-Regular", size: 16))
-                    .foregroundColor(.primary)
+                    .muFont(.body1)
+                    .foregroundColor(Color.muText)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 12)
-                    .background(Color(.systemGray6))
+                    .background(Color.muLightGray)
                     .cornerRadius(18)
-                
-                Text("대화 상대를 음성님으로 변경하였습니다.")
-                    .font(.custom("Pretendard-Regular", size: 12))
-                    .foregroundColor(.gray)
-                    .padding(.leading, 16)
             }
         }
     }

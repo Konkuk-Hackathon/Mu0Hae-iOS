@@ -11,42 +11,63 @@ struct ChatView: View {
     @StateObject private var viewModel: ChatViewModel
     @Environment(\.injected) private var injected: DIContainer
     
-    init() {
-        let tempContainer = DIContainer()
-        self._viewModel = StateObject(wrappedValue: ChatViewModel(chatUseCase: tempContainer.useCases.chat))
+    init(viewModel: ChatViewModel? = nil) {
+        if let viewModel = viewModel {
+            self._viewModel = StateObject(wrappedValue: viewModel)
+        } else {
+            let tempContainer = DIContainer()
+            self._viewModel = StateObject(wrappedValue: tempContainer.createViewModels().chatViewModel)
+        }
     }
     
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
                 // Messages ScrollView
-                ScrollView {
-                    LazyVStack(spacing: 0) {
-                        // 실제 메시지 표시
-                        if viewModel.messages.isEmpty {
-                            // 더미 데이터 (메시지가 없을 때)
-                            sampleMessageSections
-                        } else {
-                            // 실제 메시지 표시
+                if viewModel.messages.isEmpty {
+                    // 화면 정중앙에 환영 메시지
+                    VStack {
+                        Spacer()
+                        Text("무조건 공감만 해드릴게요.\n대화를 시작해주세요.")
+                            .muFont(.body1)
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(Color("muSubText"))
+                        Spacer()
+                    }
+                } else {
+                    // 실제 메시지 표시
+                    ScrollView {
+                        LazyVStack(spacing: 0) {
                             ForEach(viewModel.messages) { message in
                                 MessageRowView(message: message)
                                     .padding(.horizontal, 8)
                             }
+                            
+                            // 로딩 상태일 때 LoadingMessageView 표시
+                            if viewModel.isLoading {
+                                LoadingMessageView(guestType: viewModel.selectedGuestType)
+                                    .padding(.horizontal, 8)
+                                    .padding(.top, 8)
+                            }
                         }
+                        .padding(.horizontal, 12)
                     }
-                    .padding(.horizontal, 12)
                 }
                 
                 // Fixed Input at Bottom
                 ChatInputView(chatViewModel: viewModel)
             }
-            .background(Color(.systemBackground))
+            .background(Color("muBackground"))
             .navigationBarTitleDisplayMode(.inline)
+            .onTapGesture {
+                hideKeyboard()
+            }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Text("무공해")
-                        .font(.custom("Pretendard-Bold", size: 20))
-                        .foregroundColor(.green)
+                    Image("imgTitle")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 80)
                 }
                 
                 ToolbarItem(placement: .topBarTrailing) {
@@ -59,26 +80,8 @@ struct ChatView: View {
         }
     }
     
-    // MARK: - Sample Data (더미)
-    private var sampleMessageSections: some View {
-        VStack(spacing: 0) {
-            let user = MessageUser(name: "나", isCurrentUser: true)
-            let aiUser1 = MessageUser(name: "유병재", isCurrentUser: false, guestType: .ybj)
-            let aiUser2 = MessageUser(name: "키", isCurrentUser: false, guestType: .key)
-            
-            let todayMessages = [
-                ChatEntity(conversationId: "test", user: user, text: "오늘 나 너무 힘들어"),
-                ChatEntity(conversationId: "test", user: aiUser1, text: "와, 진짜 힘드시구나. 그런 말씀만 들어도 나도 가슴이 아파요. 정말 안스럽다."),
-                ChatEntity(conversationId: "test", user: user, text: "나기다가 오늘 비가지 어떻게 할까요?")
-            ]
-            
-            let keyMessages = [
-                ChatEntity(conversationId: "test", user: aiUser2, text: "아니 요즘 세상에 무슨 일이 다니는 사람이 이렇게 힘든 일이 있지? 진짜 진짜 안썩어요, 나미 너무 온몸이 힘나 많이 마잠지기도 대해 그냥 죄송하다고 그렇게에 대한 발병다고 요")
-            ]
-            
-            MessageSectionView(sectionType: .date(Date()), messages: todayMessages)
-            MessageSectionView(sectionType: .guestChange(from: .ybj, to: .key), messages: keyMessages)
-        }
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 

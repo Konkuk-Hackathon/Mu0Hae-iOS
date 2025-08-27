@@ -13,4 +13,8 @@ extension String {
         let formatter = ISO8601DateFormatter()
         return formatter.date(from: self) ?? Date()
     }
+    
+    var forceCharWarpping: Self {
+        self.map({ String($0) }).joined(separator: "\u{200B}")
+    }
 }

@@ -25,7 +25,7 @@ struct ChatInputView: View {
             // Text Input Field
             HStack(alignment: .top, spacing: 8) {
                 TextField("내용을 입력하세요.", text: $viewModel.currentText, axis: .vertical)
-                    .font(.custom("Pretendard-Regular", size: 16))
+                    .muFont(.body1)
                     .lineLimit(1...4)
                     .focused($isTextFieldFocused)
                 
@@ -38,7 +38,7 @@ struct ChatInputView: View {
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(Color(.systemGray6))
+            .background(Color.muTextField)
             .cornerRadius(22)
             
             // Send Button (top aligned)

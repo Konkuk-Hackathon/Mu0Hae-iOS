@@ -12,24 +12,15 @@ struct UserMessageView: View {
     
     var body: some View {
         VStack(alignment: .trailing, spacing: 4) {
-            Text(message.text)
-                .font(.custom("Pretendard-Regular", size: 16))
+            Text(message.text.forceCharWarpping)
+                .muFont(.body2)
                 .foregroundColor(.white)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
                 .background(Color.green)
                 .cornerRadius(18)
-            
-            Text(timeString)
-                .font(.custom("Pretendard-Regular", size: 11))
-                .foregroundColor(.gray)
+                .frame(maxWidth: 190, alignment: .trailing)
         }
-    }
-    
-    private var timeString: String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm"
-        return formatter.string(from: message.createdAt)
     }
 }
 

@@ -24,37 +24,40 @@ struct ChatView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
+                ChatNavigationBarView()
                 Group {
                     if viewModel.isLoadingHistory {
                         // 채팅 기록 로딩 중
                         VStack {
                             Spacer()
+                            
                             ProgressView("채팅 기록을 불러오는 중...")
                                 .muFont(.body2)
-                                .foregroundColor(Color("muSubText"))
+                                .foregroundStyle(.muSubText)
                                 .accessibilityLabel("채팅 기록 로딩 중")
                                 .accessibilityHint("이전 대화 내역을 불러오고 있습니다")
+                                
                             Spacer()
                         }
                     } else if viewModel.messages.isEmpty {
-                        // 화면 정중앙에 환영 메시지
                         VStack {
                             Spacer()
+                          
                             Text("무조건 공감만 해드릴게요.\n대화를 시작해주세요.")
                                 .muFont(.body1)
                                 .multilineTextAlignment(.center)
-                                .foregroundColor(Color("muSubText"))
+                                .foregroundColor(.muSubText)
                                 .accessibilityLabel("대화 시작 안내")
                                 .accessibilityHint("아래 입력 필드에서 메시지를 작성하여 대화를 시작하세요")
+                          
                             Spacer()
                         }
                     } else {
                         // 실제 메시지 표시
                         ScrollView {
-                            LazyVStack(spacing: 12) {
+                            LazyVStack(spacing: 20) {
                                 ForEach(viewModel.messages) { message in
                                     MessageRowView(message: message)
-                                        .padding(.horizontal, 8)
                                 }
                                 
                                 // 로딩 상태일 때 빈 메시지로 AIMessageView 표시
@@ -65,19 +68,20 @@ struct ChatView: View {
                                         .padding(.horizontal, 8)
                                 }
                             }
-                            .padding()
                             .rotationEffect(.degrees(180)).scaleEffect(x: -1, y: 1, anchor: .center)
+                            .padding(.vertical, 20)
                         }
                         .rotationEffect(.degrees(180)).scaleEffect(x: -1, y: 1, anchor: .center)
                         .accessibilityLabel("채팅 메시지 목록")
                         .accessibilityHint("위아래로 스크롤하여 대화 내용을 확인할 수 있습니다")
+                        .scrollIndicators(.hidden)
+                        .padding(.horizontal, 20)
                     }
                 }
                 
                 ChatInputView(chatViewModel: viewModel)
             }
             .background(Color.muBackground)
-            .navigationBarTitleDisplayMode(.inline)
             .onTapGesture {
                 hideKeyboard()
             }
@@ -110,6 +114,31 @@ struct ChatView: View {
     
     private func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
+private struct ChatNavigationBarView: View {
+    @Environment(MainCoordinator.self) private var coordiinator
+    
+    var body: some View {
+        HStack(spacing: 0) {
+            Image(.imgTitle)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 78)
+            
+            Spacer()
+            
+            Image(.icHamburger)
+                .renderingMode(.template)
+                .foregroundStyle(.muText)
+                .onTapGesture {
+                    coordiinator.push(.guestSelection)
+                }
+        }
+        .frame(height: 56)
+        .padding(.horizontal, 20)
+        .background(Color.muBackground)
     }
 }
 

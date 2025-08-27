@@ -24,49 +24,54 @@ struct ChatInputView: View {
         HStack(alignment: .top, spacing: 8) {
             // Text Input Field
             HStack(alignment: .center, spacing: 8) {
-                TextField("내용을 입력하세요.", text: $viewModel.currentText, axis: .vertical)
-                    .muFont(.body1)
-                    .lineLimit(1...4)
-                    .focused($isTextFieldFocused)
-                    .accessibilityLabel("메시지 입력 필드")
-                    .accessibilityHint("메시지를 입력하거나 음성 녹음을 사용할 수 있습니다")
-                    .accessibilityValue(viewModel.currentText.isEmpty ? "비어있음" : viewModel.currentText)
+              
+                TextField("마음 속 이야기를 적어주세요",
+                          text: $viewModel.currentText,
+                          axis: .vertical)
+                .foregroundStyle(.muText)
+                .muFont(.body1)
+                .lineLimit(1...4)
+                .focused($isTextFieldFocused)
+                .accessibilityLabel("메시지 입력 필드")
+                .accessibilityHint("메시지를 입력하거나 음성 녹음을 사용할 수 있습니다")
+                .accessibilityValue(viewModel.currentText.isEmpty ? "비어있음" : viewModel.currentText)
                 
-                Button(action: {
+                Button {
                     viewModel.toggleRecording()
-                }) {
-                    Image(viewModel.isRecording ? "icMic" : "icMic_filled")
-                        .resizable()
-                        .frame(width: 28, height: 28)
-                        .foregroundColor(viewModel.isRecording ? .muPrimary : .muBackground)
+                } label: {
+                    Image(viewModel.isRecording ? .icMic : .icMic)
+                        .renderingMode(.template)
+                        .foregroundColor(.muPrimary)
                 }
                 .accessibilityLabel(viewModel.isRecording ? "녹음 중지" : "음성 녹음 시작")
                 .accessibilityHint(viewModel.isRecording ? "탭하여 음성 녹음을 중지합니다" : "탭하여 음성으로 메시지를 입력할 수 있습니다")
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 12)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 11)
             .background(Color.muTextField)
-            .cornerRadius(22)
+            .cornerRadius(14)
             
             // Send Button (top aligned)
-            Button(action: {
+            Button {
                 viewModel.sendMessage()
                 isTextFieldFocused = false
-            }) {
+            } label: {
                 if viewModel.isSending {
                     ProgressView()
                         .scaleEffect(0.8)
                         .tint(.white)
                         .frame(width: 44, height: 44)
-                        .background(Color.green)
+                        .background(.muPrimary)
                         .clipShape(Circle())
                 } else {
-                    Image("icSend")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(Color.muBackground)
-                        .frame(width: 44, height: 44)
-                        .background(viewModel.isValidText ? .muPrimary : .muPlaceHolder)
-                        .clipShape(Circle())
+                    RoundedRectangle(cornerRadius: 14)
+                        .frame(width: 42, height: 42)
+                        .foregroundStyle(viewModel.isValidText ? .muPrimary : .muPlaceHolder)
+                        .overlay {
+                            Image(.icSend)
+                                .renderingMode(.template)
+                                .foregroundStyle(.muBackground)
+                        }
                 }
             }
             .disabled(!viewModel.isValidText || viewModel.isSending)
@@ -76,8 +81,8 @@ struct ChatInputView: View {
             .accessibilityAddTraits(viewModel.isSending ? [] : .isButton)
             .padding(4)
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
+        .padding(.horizontal, 15)
+        .padding(.vertical, 18)
         .background(Color(.systemBackground))
         .onAppear {
             setupBindings()

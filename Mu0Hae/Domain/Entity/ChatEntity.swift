@@ -5,7 +5,7 @@
 //  Created by 박성근 on 8/25/25.
 //
 
-import Foundation
+import SwiftUI
 import Speech
 
 public struct ChatEntity: Identifiable, Hashable, Sendable {
@@ -33,6 +33,13 @@ public enum GuestType: String, Hashable, Sendable {
         switch self {
         case .ubyung: return "유병재"
         case .key: return "키"
+        }
+    }
+    
+    var image: Image {
+        switch self {
+        case .ubyung: Image(.ybj)
+        case .key: Image(.key)
         }
     }
 }

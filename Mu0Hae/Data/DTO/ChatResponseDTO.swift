@@ -9,13 +9,13 @@ import Foundation
 
 // MARK: - Response DTOs
 struct ChatResponseDTO: Codable {
-    let message: String
-    let timestamp: String?
-    let conversationId: String?
+    let response: String
+    let timeStamp: String?
+    let conversationId: String? // TODO: 추후 삭제될 속성
     
-    init(message: String, timestamp: String? = nil, conversationId: String? = nil) {
-        self.message = message
-        self.timestamp = timestamp
+    init(response: String, timeStamp: String? = nil, conversationId: String? = nil) {
+        self.response = response
+        self.timeStamp = timeStamp
         self.conversationId = conversationId
     }
     
@@ -26,12 +26,12 @@ struct ChatResponseDTO: Codable {
             guestType: guestType
         )
         
-        let createdAt = timestamp?.toDate() ?? Date()
+        let createdAt = timeStamp?.toDate() ?? Date()
         
         return ChatEntity(
             conversationId: conversationId ?? "",
             user: aiUser,
-            text: message,
+            text: response,
             createdAt: createdAt
         )
     }

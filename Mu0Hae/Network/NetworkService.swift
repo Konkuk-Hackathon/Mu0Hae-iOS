@@ -8,11 +8,11 @@
 import Foundation
 
 class ChatNetworkService {
-    private let baseURL = "https://your-api-base-url.com" // TODO: url 교체
+    private let baseURL = "https://gllo-server.shop"
     private let session = URLSession.shared
     
     func sendChatMessage(_ request: ChatRequestDTO) async throws -> ChatResponseDTO {
-        guard let url = URL(string: "\(baseURL)/chat") else {
+        guard let url = URL(string: "\(baseURL)/api/chat") else {
             throw NetworkError.invalidURL
         }
         
@@ -24,6 +24,11 @@ class ChatNetworkService {
             let jsonData = try JSONEncoder().encode(request)
             urlRequest.httpBody = jsonData
             
+            // 요청 데이터 로그 출력
+            if let requestString = String(data: jsonData, encoding: .utf8) {
+                Logger.log(message: "📤 API Request: \(requestString)")
+            }
+            
             let (data, response) = try await session.data(for: urlRequest)
             
             guard let httpResponse = response as? HTTPURLResponse else {
@@ -31,7 +36,16 @@ class ChatNetworkService {
             }
             
             guard 200...299 ~= httpResponse.statusCode else {
+                // 서버 에러 응답도 로그로 출력
+                if let errorString = String(data: data, encoding: .utf8) {
+                    Logger.log(message: "❌ Server Error Response: \(errorString)")
+                }
                 throw NetworkError.serverError(httpResponse.statusCode)
+            }
+            
+            // 응답 데이터를 로그로 출력
+            if let responseString = String(data: data, encoding: .utf8) {
+                Logger.log(message: "📤 API Response: \(responseString)")
             }
             
             let responseDTO = try JSONDecoder().decode(ChatResponseDTO.self, from: data)

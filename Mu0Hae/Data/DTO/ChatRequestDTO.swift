@@ -9,7 +9,7 @@ import Foundation
 
 // MARK: - Request DTOs
 struct ChatRequestDTO: Codable {
-    let conversationId: String
+    let conversationId: String // TODO: 추후 삭제될 속성
     let message: String
     let guestCode: String
     

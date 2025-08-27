@@ -15,10 +15,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
-				"Resources/Fonts/Pretendard-Bold.otf",
-				"Resources/Fonts/Pretendard-Medium.otf",
-				"Resources/Fonts/Pretendard-Regular.otf",
-				"Resources/Fonts/Pretendard-SemiBold.otf",
 			);
 			target = 8011ED9D2E5C651D003EDF54 /* Mu0Hae */;
 		};

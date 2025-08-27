@@ -20,12 +20,12 @@ struct GuestDescriptionPopup: View {
                     .foregroundStyle(.muSecondary)
                     .padding(.bottom, 15)
                 
-                Text("유병재")
+                Text(viewModel.selectedGuest.name)
                     .muFont(.title1)
                     .foregroundStyle(.muText)
                     .padding(.bottom, 6)
                 
-                Text("왜 그런지 몰라도, 어떤 사연이든 \n다 공감해드립니다.")
+                Text(viewModel.selectedGuest.description)
                     .muFont(.title2)
                     .foregroundStyle(.muSubText)
                     .multilineTextAlignment(.center)

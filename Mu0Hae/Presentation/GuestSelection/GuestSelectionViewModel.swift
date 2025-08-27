@@ -10,6 +10,7 @@ import SwiftUI
 @Observable
 final class GuestSelectionViewModel {
     var isShowingPopup: Bool = false
+    var selectedGuest: GuestEntity = .ybj
     
     func showPopup() {
         withAnimation(.easeInOut(duration: 0.25)) {

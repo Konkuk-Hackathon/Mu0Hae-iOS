@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct GuestSelectionCard: View {
+    let guest: GuestEntity
+    
     var body: some View {
         ZStack(alignment: .top) {
             RoundedRectangle(cornerRadius: 14)
@@ -24,15 +26,10 @@ struct GuestSelectionCard: View {
                     .foregroundStyle(Color.muSecondary)
                     .padding()
                 
-                Text("유병재")
+                Text(guest.name)
                     .muFont(.title1)
                     .foregroundStyle(.muText)
             }
         }
     }
-}
-
-
-#Preview {
-    GuestSelectionCard()
 }

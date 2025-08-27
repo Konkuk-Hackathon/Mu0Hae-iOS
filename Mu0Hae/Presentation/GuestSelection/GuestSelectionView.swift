@@ -20,9 +20,12 @@ struct GuestSelectionView: View {
                 GuestSelectionNavigationBarView()
                 
                 LazyVGrid(columns: columns, spacing: 25) {
-                    ForEach(1...4, id: \.self) { _ in
-                        GuestSelectionCard()
-                            .onTapGesture { viewModel.showPopup() }
+                    ForEach(GuestEntity.allCases, id: \.self) { guest in
+                        GuestSelectionCard(guest: guest)
+                            .onTapGesture {
+                                viewModel.selectedGuest = guest
+                                viewModel.showPopup()
+                            }
                     }
                 }
                 .padding(.top, 25)

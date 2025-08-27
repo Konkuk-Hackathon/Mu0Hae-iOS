@@ -21,7 +21,8 @@ struct GuestSelectionView: View {
                 
                 LazyVGrid(columns: columns, spacing: 25) {
                     ForEach(GuestEntity.allCases, id: \.self) { guest in
-                        GuestSelectionCard(guest: guest)
+                        GuestSelectionCard(viewModel: viewModel,
+                                           guest: guest)
                             .onTapGesture {
                                 viewModel.selectedGuest = guest
                                 viewModel.showPopup()

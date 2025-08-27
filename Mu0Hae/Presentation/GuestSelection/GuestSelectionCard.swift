@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct GuestSelectionCard: View {
+    let viewModel: GuestSelectionViewModel
     let guest: GuestEntity
     
     var body: some View {
@@ -17,7 +18,8 @@ struct GuestSelectionCard: View {
                 .foregroundStyle(Color.muBackground)
                 .overlay {
                     RoundedRectangle(cornerRadius: 14)
-                        .stroke(Color.muPrimary, lineWidth: 1)
+                        .stroke(Color.muPrimary,
+                                lineWidth: viewModel.selectedGuest == guest ? 5 : 1)
                 }
             
             VStack(spacing: 20) {

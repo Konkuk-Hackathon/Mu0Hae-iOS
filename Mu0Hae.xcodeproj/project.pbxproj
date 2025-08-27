@@ -11,7 +11,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		B91803712E5ECF7D00B0AF90 /* Exceptions for "Mu0Hae" folder in "Mu0Hae" target */ = {
+		80202B4D2E5F0F6500F86C9C /* Exceptions for "Mu0Hae" folder in "Mu0Hae" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				App/Resources/Info.plist,
@@ -24,7 +24,7 @@
 		8011EDA02E5C651D003EDF54 /* Mu0Hae */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				B91803712E5ECF7D00B0AF90 /* Exceptions for "Mu0Hae" folder in "Mu0Hae" target */,
+				80202B4D2E5F0F6500F86C9C /* Exceptions for "Mu0Hae" folder in "Mu0Hae" target */,
 			);
 			path = Mu0Hae;
 			sourceTree = "<group>";
@@ -275,7 +275,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UIUserInterfaceStyle = LIGHT;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -312,7 +312,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_UIUserInterfaceStyle = LIGHT;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

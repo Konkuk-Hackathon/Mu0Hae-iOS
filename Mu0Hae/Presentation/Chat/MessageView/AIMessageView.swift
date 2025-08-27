@@ -10,6 +10,11 @@ import SwiftUI
 struct AIMessageView: View {
     let message: ChatEntity
     @State private var isPlaying: Bool = false
+    @State private var animationPhase = 0
+    
+    var isLoading: Bool {
+        message.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
     
     var body: some View {
         HStack(alignment: .top, spacing: 8) {
@@ -29,25 +34,62 @@ struct AIMessageView: View {
             // Message Content
             VStack(alignment: .leading, spacing: 4) {
                 HStack(alignment: .center, spacing: 8) {
-                    Text(message.text.forceCharWarpping)
-                        .muFont(.body2)
-                        .foregroundColor(.primary)
+                    if isLoading {
+                        // Loading animation
+                        HStack(spacing: 4) {
+                            ForEach(0..<3) { index in
+                                Circle()
+                                    .fill(Color.muSubText)
+                                    .frame(width: 6, height: 6)
+                                    .scaleEffect(animationPhase == index ? 1.2 : 0.8)
+                                    .animation(
+                                        Animation.easeInOut(duration: 0.6)
+                                            .repeatForever()
+                                            .delay(Double(index) * 0.2),
+                                        value: animationPhase
+                                    )
+                            }
+                        }
                         .padding(.horizontal, 16)
                         .padding(.vertical, 12)
                         .background(Color.muLightGray)
                         .cornerRadius(18)
                         .frame(maxWidth: 190, alignment: .leading)
+                    } else {
+                        // Regular message
+                        Text(message.text.forceCharWarpping)
+                            .muFont(.body2)
+                            .foregroundColor(.primary)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 12)
+                            .background(Color.muLightGray)
+                            .cornerRadius(18)
+                            .frame(maxWidth: 190, alignment: .leading)
+                    }
                     
-                    // Speaker Button
-                    Button(action: {
-                        // TODO: TTS
-                        isPlaying.toggle()
-                    }) {
-                        Image(systemName: isPlaying ? "speaker.wave.2.fill" : "speaker.fill")
-                            .font(.system(size: 16))
-                            .foregroundColor(Color.muSubText)
+                    // Speaker Button (only show when not loading)
+                    if !isLoading {
+                        Button(action: {
+                            // TODO: TTS
+                            isPlaying.toggle()
+                        }) {
+                            Image(systemName: isPlaying ? "speaker.wave.2.fill" : "speaker.fill")
+                                .font(.system(size: 16))
+                                .foregroundColor(Color.muSubText)
+                                .frame(width: 24, height: 24)
+                        }
+                    } else {
+                        // Placeholder space when loading
+                        Color.clear
                             .frame(width: 24, height: 24)
                     }
+                }
+            }
+        }
+        .onAppear {
+            if isLoading {
+                withAnimation {
+                    animationPhase = 2
                 }
             }
         }

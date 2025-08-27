@@ -44,11 +44,12 @@ struct ChatView: View {
                                     .padding(.horizontal, 8)
                             }
                             
-                            // 로딩 상태일 때 LoadingMessageView 표시
+                            // 로딩 상태일 때 빈 메시지로 AIMessageView 표시
                             if viewModel.isLoading {
-                                LoadingMessageView(guestType: viewModel.selectedGuestType)
+                                let loadingUser = MessageUser(name: viewModel.selectedGuestType.displayName, isCurrentUser: false, guestType: viewModel.selectedGuestType)
+                                let loadingMessage = ChatEntity(user: loadingUser, text: "")
+                                MessageRowView(message: loadingMessage)
                                     .padding(.horizontal, 8)
-                                    .padding(.top, 8)
                             }
                         }
                         .padding(.horizontal, 12)

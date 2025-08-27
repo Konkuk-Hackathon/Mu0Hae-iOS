@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct Mu0HaeApp: App {
+    private let container = DIContainer()
+    
     var body: some Scene {
         WindowGroup {
             CoordinatorView()
+                .inject(container)
         }
     }
 }

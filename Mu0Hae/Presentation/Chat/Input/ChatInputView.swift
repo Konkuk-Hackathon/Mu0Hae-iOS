@@ -32,7 +32,9 @@ struct ChatInputView: View {
                 Button(action: {
                     viewModel.toggleRecording()
                 }) {
-                    Image("icMic")
+                    Image(viewModel.isRecording ? "icMic" : "icMic_filled")
+                        .resizable()
+                        .frame(width: 28, height: 28)
                         .foregroundColor(viewModel.isRecording ? .muPrimary : .muBackground)
                 }
             }
@@ -63,6 +65,7 @@ struct ChatInputView: View {
                 }
             }
             .disabled(!viewModel.isValidText || viewModel.isSending)
+            .padding(4)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)

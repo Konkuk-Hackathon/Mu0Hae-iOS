@@ -8,11 +8,20 @@
 import SwiftUI
 
 struct GuestSelectionView: View {
-    @State var viewModel: GuestSelectionViewModel = .init()
+    @State var viewModel: GuestSelectionViewModel
     
     private let itemWidth: CGFloat = (UIApplication.screenWidth - 25 * 3) / 2
     private var columns: [GridItem] { [GridItem(.fixed(itemWidth)),
                                        GridItem(.fixed(itemWidth)) ] }
+    
+    init(viewModel: GuestSelectionViewModel? = nil) {
+        if let viewModel = viewModel {
+            self._viewModel = State(wrappedValue: viewModel)
+        } else {
+            let tempContainer = DIContainer()
+            self._viewModel = State(wrappedValue: tempContainer.createViewModels().guestViewModel)
+        }
+    }
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -20,13 +29,14 @@ struct GuestSelectionView: View {
                 GuestSelectionNavigationBarView()
                 
                 LazyVGrid(columns: columns, spacing: 25) {
-                    ForEach(GuestEntity.allCases, id: \.self) { guest in
-                        GuestSelectionCard(viewModel: viewModel,
-                                           guest: guest)
-                            .onTapGesture {
-                                viewModel.selectedGuest = guest
-                                viewModel.showPopup()
-                            }
+                    ForEach(viewModel.guestList) { guest in
+                        if let guestType = GuestType(rawValue: guest.id) {
+                            GuestSelectionCard(viewModel: viewModel, guest: guestType)
+                                .onTapGesture {
+                                    viewModel.selectedGuest = guestType
+                                    viewModel.showPopup()
+                                }
+                        }
                     }
                 }
                 .padding(.top, 25)
@@ -41,6 +51,11 @@ struct GuestSelectionView: View {
         }
         .background(Color.muBackground)
         .navigationBarBackButtonHidden()
+        .onAppear {
+            Task {
+                await viewModel.fetchGuests()
+            }
+        }
     }
 }
 

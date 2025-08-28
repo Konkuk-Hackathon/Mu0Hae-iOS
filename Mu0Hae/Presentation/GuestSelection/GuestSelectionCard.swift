@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GuestSelectionCard: View {
     let viewModel: GuestSelectionViewModel
-    let guest: GuestEntity
+    let guest: GuestType
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -29,7 +29,7 @@ struct GuestSelectionCard: View {
                     .foregroundStyle(Color.muSecondary)
                     .padding()
                 
-                Text(guest.name)
+                Text(guest.displayName)
                     .muFont(.title1)
                     .foregroundStyle(.muText)
             }

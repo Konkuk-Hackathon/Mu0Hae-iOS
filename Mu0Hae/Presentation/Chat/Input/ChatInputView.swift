@@ -83,7 +83,24 @@ struct ChatInputView: View {
         }
         .padding(.horizontal, 15)
         .padding(.vertical, 18)
-        .background(Color(.systemBackground))
+        .background(
+            Color.muBackground
+                .clipShape(
+                    .rect(
+                        topLeadingRadius: 15,
+                        bottomLeadingRadius: 0,
+                        bottomTrailingRadius: 0,
+                        topTrailingRadius: 15
+                    )
+                )
+                .background(Color.muLightGray) // 이 부분이 뒤로 나올 배경
+        )
+        .shadow(
+            color: Color.black.opacity(0.05),
+            radius: 15,
+            x: 0,
+            y: -2
+        )
         .onAppear {
             setupBindings()
         }

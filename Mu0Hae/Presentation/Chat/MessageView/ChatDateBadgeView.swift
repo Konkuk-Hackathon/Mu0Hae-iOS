@@ -19,10 +19,7 @@ struct ChatDateBadgeView: View {
     var body: some View {
         Text(date)
             .muFont(.body3)
-            .foregroundColor(Color("muSubText"))
-            .padding(.vertical, 4)
-            .padding(.horizontal, 12)
-            .background(Color("muLightGray"))
+            .foregroundColor(Color.muSubText)
             .cornerRadius(12)
             .accessibilityLabel("날짜 구분선")
             .accessibilityValue(date)

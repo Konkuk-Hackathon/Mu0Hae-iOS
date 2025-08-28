@@ -28,11 +28,15 @@ public struct ChatEntity: Identifiable, Hashable, Sendable {
 public enum GuestType: String, Hashable, Sendable {
     case ubyung = "ubyung"
     case key = "key"
+    case baekhyun = "back"
+    case jaesuk = "you"
     
     var displayName: String {
         switch self {
         case .ubyung: return "유병재"
         case .key: return "키"
+        case .baekhyun: return "백현"
+        case .jaesuk: return "유재석"
         }
     }
     
@@ -40,6 +44,17 @@ public enum GuestType: String, Hashable, Sendable {
         switch self {
         case .ubyung: Image(.ybj)
         case .key: Image(.key)
+        case .baekhyun: Image(.key)
+        case .jaesuk: Image(.ybj)
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .ubyung: return "어떤 사연이든, 무엇이든 다 공감해드립니다."
+        case .key: return "샤이니 T 아니고 키에요. 믿고 맡겨주세요."
+        case .baekhyun: return "감미로운 목소리로 당신의 이야기에 귀 기울여줄게요."
+        case .jaesuk: return "국민MC로서 유퀴즈에 온 것 같은 공감능력을 보여드릴게요."
         }
     }
 }

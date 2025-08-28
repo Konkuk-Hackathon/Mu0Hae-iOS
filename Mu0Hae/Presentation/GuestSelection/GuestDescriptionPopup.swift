@@ -21,7 +21,7 @@ struct GuestDescriptionPopup: View {
                     .foregroundStyle(.muSecondary)
                     .padding(.bottom, 15)
                 
-                Text(viewModel.selectedGuest.name)
+                Text(viewModel.selectedGuest.displayName)
                     .muFont(.title1)
                     .foregroundStyle(.muText)
                     .padding(.bottom, 6)

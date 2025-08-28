@@ -34,11 +34,13 @@ extension DIContainer {
     struct Services {
         let chatNetwork: ChatNetworkService
         let chatHistoryNetwork: ChatHistoryNetworkServiceProtocol
+        let guest: GuestService
         
         static var live: Self {
             .init(
                 chatNetwork: ChatNetworkService(),
-                chatHistoryNetwork: ChatHistoryNetworkService()
+                chatHistoryNetwork: ChatHistoryNetworkService(),
+                guest: GuestService()
             )
         }
     }
@@ -46,30 +48,36 @@ extension DIContainer {
     struct Repositories {
         let chat: ChatRepository
         let chatHistory: ChatHistoryRepository
+        let guest: GuestRepository
         
         init(services: Services) {
             self.chat = DefaultChatRepository(chatService: services.chatNetwork)
             self.chatHistory = DefaultChatHistoryRepository(chatHistoryService: services.chatHistoryNetwork)
+            self.guest = DefaultGuestRepository(guestService: services.guest)
         }
     }
     
     struct UseCases {
         let chat: ChatUseCase
         let chatHistory: ChatHistoryUseCase
+        let guest: GuestUseCase
         
         init(repositories: Repositories) {
             self.chat = DefaultChatUseCase(chatRepository: repositories.chat)
             // TODO: 테스트를 위한 MockHistory 생성 -> API OK시 DefaultChatHistoryUseCase(repository: repositories.chatHistory)로 변경
             self.chatHistory = MockChatHistoryUseCase()
+            self.guest = DefaultGuestUseCase(repository: repositories.guest)
         }
     }
     
     @MainActor
     struct ViewModels {
         let chatViewModel: ChatViewModel
+        let guestViewModel: GuestSelectionViewModel
         
         init(useCases: UseCases) {
             self.chatViewModel = ChatViewModel(chatUseCase: useCases.chat)
+            self.guestViewModel = GuestSelectionViewModel(guestUseCase: useCases.guest)
         }
     }
 }

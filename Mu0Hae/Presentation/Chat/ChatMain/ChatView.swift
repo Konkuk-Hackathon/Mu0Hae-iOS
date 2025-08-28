@@ -90,7 +90,6 @@ struct ChatView: View {
                         .accessibilityHint("위아래로 스크롤하여 대화 내용을 확인할 수 있습니다")
                         .scrollIndicators(.hidden)
                         .padding(.horizontal, 20)
-                        .background(Color.muLightGray)
                     }
                 }
                 

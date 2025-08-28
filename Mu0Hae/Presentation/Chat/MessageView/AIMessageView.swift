@@ -76,7 +76,10 @@ struct AIMessageView: View {
                             isPlaying.toggle()
                             if let speakerId = message.user.guestType?.rawValue {
                                 Task {
-                                    await viewModel.fetchAndPlay(text: message.text, speakerId: speakerId)
+                                    await viewModel.fetchAndPlay(
+                                        text: message.text,
+                                        speakerId: speakerId
+                                    )
                                 }
                             } else {
                                 print("❌ speakerId가 존재하지 않습니다.")

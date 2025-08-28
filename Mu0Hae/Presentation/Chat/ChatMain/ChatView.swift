@@ -81,7 +81,6 @@ struct ChatView: View {
                                                                   guestType: viewModel.selectedGuestType)
                                     let loadingMessage = ChatEntity(user: loadingUser, text: "")
                                     MessageRowView(message: loadingMessage)
-                                        //.padding(.horizontal, 8)
                                 }
                             }
                             .rotationEffect(.degrees(180)).scaleEffect(x: -1, y: 1, anchor: .center)

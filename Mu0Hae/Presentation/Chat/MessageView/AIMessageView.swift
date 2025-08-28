@@ -74,8 +74,10 @@ struct AIMessageView: View {
                     if !isLoading {
                         Button {
                             isPlaying.toggle()
+                            // TODO: speakerId 대이터 연결 필요
                             Task {
-                                await viewModel.fetchAndPlay(text: message.text, speakerId: "key")
+                                await viewModel.fetchAndPlay(text: message.text,
+                                                             speakerId: "key")
                             }
                             
                         } label: {

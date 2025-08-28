@@ -15,6 +15,7 @@ final class GuestSelectionViewModel {
     var guestList: [GuestEntity] = []
     var isShowingPopup: Bool = false
     var selectedGuest: GuestType = .ubyung
+    var isLoading: Bool = false
     
     init (guestUseCase: GuestUseCase) {
         self.guestUseCase = guestUseCase
@@ -33,6 +34,9 @@ final class GuestSelectionViewModel {
     }
     
     func fetchGuests() async {
+        isLoading = true
+        defer { isLoading = false }
+        
         do {
             let guests = try await guestUseCase.getGuestList()
             self.guestList = guests

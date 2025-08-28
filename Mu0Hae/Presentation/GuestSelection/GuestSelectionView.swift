@@ -28,20 +28,29 @@ struct GuestSelectionView: View {
             VStack(spacing: 0) {
                 GuestSelectionNavigationBarView()
                 
-                LazyVGrid(columns: columns, spacing: 25) {
-                    ForEach(viewModel.guestList) { guest in
-                        if let guestType = GuestType(rawValue: guest.id) {
-                            GuestSelectionCard(viewModel: viewModel, guest: guestType)
-                                .onTapGesture {
-                                    viewModel.selectedGuest = guestType
-                                    viewModel.showPopup()
-                                }
+                if viewModel.isLoading {
+                    Spacer()
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .frame(width: 50, height: 50)
+                        .padding(4)
+                    Spacer()
+                } else {
+                    LazyVGrid(columns: columns, spacing: 25) {
+                        ForEach(viewModel.guestList) { guest in
+                            if let guestType = GuestType(rawValue: guest.id) {
+                                GuestSelectionCard(viewModel: viewModel, guest: guestType)
+                                    .onTapGesture {
+                                        viewModel.selectedGuest = guestType
+                                        viewModel.showPopup()
+                                    }
+                            }
                         }
                     }
+                    .padding(.top, 25)
+                    
+                    Spacer()
                 }
-                .padding(.top, 25)
-                
-                Spacer()
             }
             
             if viewModel.isShowingPopup {

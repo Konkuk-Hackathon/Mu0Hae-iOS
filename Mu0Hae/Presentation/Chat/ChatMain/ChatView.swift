@@ -57,17 +57,17 @@ struct ChatView: View {
                         ScrollView {
                             LazyVStack(spacing: 20) {
                                 ForEach(Array(viewModel.messages.enumerated()), id: \.element.id) { index, message in
-                                    VStack(spacing: 8) {
+                                    VStack(spacing: 0) {
                                         // 날짜 변경 체크: 이전 메시지와 다른 날짜면 ChatDateBadgeView 표시
                                         if viewModel.shouldShowDateBadge(for: message, at: index) {
                                             ChatDateBadgeView(date: message.createdAt)
-                                                .padding(.vertical, 8)
+                                                .padding(.bottom, 20)
                                         }
                                         
                                         // 게스트 변경 체크: AI 메시지에서 이전과 다른 게스트면 GuestChangeNotificationView 표시
                                         if let guestChange = viewModel.shouldShowGuestChange(for: message, at: index) {
                                             GuestChangeNotificationView(from: guestChange.from, to: guestChange.to)
-                                                .padding(.vertical, 4)
+                                                .padding(.bottom, 20)
                                         }
                                         
                                         MessageRowView(message: message)

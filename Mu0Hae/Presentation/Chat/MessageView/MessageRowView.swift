@@ -11,7 +11,7 @@ struct MessageRowView: View {
     let message: ChatEntity
     
     var body: some View {
-        HStack {
+        HStack(spacing: 0) {
             if message.user.isCurrentUser {
                 Spacer()
                 UserMessageView(message: message)

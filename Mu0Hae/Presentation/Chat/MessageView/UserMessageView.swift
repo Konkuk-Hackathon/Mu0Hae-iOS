@@ -15,7 +15,7 @@ struct UserMessageView: View {
             Text(message.text.forceCharWarpping)
                 .muFont(.body2)
                 .foregroundColor(.muText)
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 16)
                 .padding(.vertical, 10)
                 .background(.muSecondary)
                 .cornerRadius(14)

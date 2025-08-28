@@ -76,10 +76,12 @@ struct ChatView: View {
                                 
                                 // 로딩 상태일 때 빈 메시지로 AIMessageView 표시
                                 if viewModel.isLoading {
-                                    let loadingUser = MessageUser(name: viewModel.selectedGuestType.displayName, isCurrentUser: false, guestType: viewModel.selectedGuestType)
+                                    let loadingUser = MessageUser(name: viewModel.selectedGuestType.displayName,
+                                                                  isCurrentUser: false,
+                                                                  guestType: viewModel.selectedGuestType)
                                     let loadingMessage = ChatEntity(user: loadingUser, text: "")
                                     MessageRowView(message: loadingMessage)
-                                        .padding(.horizontal, 8)
+                                        //.padding(.horizontal, 8)
                                 }
                             }
                             .rotationEffect(.degrees(180)).scaleEffect(x: -1, y: 1, anchor: .center)

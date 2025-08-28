@@ -53,38 +53,60 @@ class CreateTTSService {
 }
 
 @MainActor
-final class TTSViewModel: ObservableObject {
+final class TTSViewModel: NSObject, ObservableObject {
     @Published var isLoading = false
     @Published var audioPlayer: AVAudioPlayer?
-
+    
     private let service = CreateTTSService()
-
+    private var currentFileURL: URL?
+    
     func fetchAndPlay(text: String, speakerId: String) async {
-            isLoading = true
-            defer { isLoading = false }
+        guard !isLoading else { return }
+        
+        isLoading = true
+        defer { isLoading = false }
+        
+        do {
+            let wavData = try await service.requestTTS(text: text, speakerId: speakerId)
+            
+            // 기존 오디오가 재생 중이면 중단
+            if audioPlayer?.isPlaying == true {
+                audioPlayer?.stop()
+            }
+            
+            // 저장
+            let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent("tts.wav")
+            try wavData.write(to: fileURL)
+            currentFileURL = fileURL
+            
+            // wav 파일 확인
+            if FileManager.default.fileExists(atPath: fileURL.path) {
+                print("🎵 wav 파일 생성 성공: \(fileURL.path)")
+            } else {
+                print("❌ wav 파일이 존재하지 않습니다")
+            }
+            
+            // 재생
+            audioPlayer = try AVAudioPlayer(contentsOf: fileURL)
+            audioPlayer?.delegate = self
+            audioPlayer?.prepareToPlay()
+            audioPlayer?.play()
+        } catch {
+            print("❌ TTS 실패:", error.localizedDescription)
+        }
+    }
+}
 
+extension TTSViewModel: AVAudioPlayerDelegate {
+    nonisolated func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        Task { @MainActor in
+            guard let fileURL = currentFileURL else { return }
             do {
-                let wavData = try await service.requestTTS(text: text, speakerId: speakerId)
-
-                // 저장
-                let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent("tts.wav")
-                try wavData.write(to: fileURL)
-
-                // wav 파일 확인
-                if FileManager.default.fileExists(atPath: fileURL.path) {
-                    print("🎵 wav 파일 생성 성공: \(fileURL.path)")
-                } else {
-                    print("❌ wav 파일이 존재하지 않습니다")
-                }
-
-                // 재생
-                audioPlayer = try AVAudioPlayer(contentsOf: fileURL)
-                audioPlayer?.prepareToPlay()
-                audioPlayer?.play()
-
-
+                try FileManager.default.removeItem(at: fileURL)
+                print("✅ WAV 파일 삭제 완료:", fileURL)
             } catch {
-                print("❌ TTS 실패:", error.localizedDescription)
+                print("❌ WAV 파일 삭제 실패:", error)
             }
         }
+    }
 }

@@ -74,10 +74,13 @@ struct AIMessageView: View {
                     if !isLoading {
                         Button {
                             isPlaying.toggle()
-                            // TODO: speakerId 대이터 연결 필요
-                            Task {
-                                await viewModel.fetchAndPlay(text: message.text,
-                                                             speakerId: "key")
+                            if let speakerId = message.user.guestType?.rawValue {
+                                Task {
+                                    await viewModel.fetchAndPlay(text: message.text, speakerId: speakerId)
+                                }
+                            } else {
+                                print("❌ speakerId가 존재하지 않습니다.")
+                                isPlaying = false
                             }
                             
                         } label: {

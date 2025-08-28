@@ -47,6 +47,7 @@ final class GuestSelectionViewModel {
     }
     
     func saveCurrentGuest() {
+        userDefaultsService.remove(key: .currentGuest)
         userDefaultsService.save(value: selectedGuest.rawValue, key: .currentGuest)
     }
     

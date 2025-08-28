@@ -63,9 +63,6 @@ final class MainCoordinator: MainCoordinatorProtocol {
         case .chat:
             if let container = container {
                 ChatView(viewModel: container.createViewModels().chatViewModel)
-            } else {
-                // TODO: 에러 처리
-                ChatView()
             }
         case .guestSelection:
             GuestSelectionView()

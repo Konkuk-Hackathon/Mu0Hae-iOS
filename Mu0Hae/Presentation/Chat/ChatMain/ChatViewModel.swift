@@ -84,13 +84,20 @@ final class ChatViewModel: ObservableObject {
             do {
                 let threads = try await container.useCases.chatHistory.getChatHistory()
                 
-                // 가장 최근 스레드의 메시지들을 로드
-                if let latestThread = threads.first {
-                    await MainActor.run {
-                        self.messages = latestThread.messages
-                        self.conversationId = latestThread.conversationId
-                        self.isLoadingHistory = false
-                    }
+                // 모든 스레드의 모든 메시지들을 시간순으로 합쳐서 로드
+                var allMessages: [ChatEntity] = []
+                
+                for thread in threads {
+                    allMessages.append(contentsOf: thread.messages)
+                }
+                
+                // 시간순으로 정렬 (오래된 것부터)
+                allMessages.sort { $0.createdAt < $1.createdAt }
+                
+                await MainActor.run {
+                    self.messages = allMessages
+                    self.conversationId = threads.first?.conversationId ?? "default"
+                    self.isLoadingHistory = false
                 }
             } catch {
                 await MainActor.run {
@@ -99,6 +106,40 @@ final class ChatViewModel: ObservableObject {
                 }
             }
         }
+    }
+    
+    // MARK: - UI Helper Methods
+    func shouldShowDateBadge(for message: ChatEntity, at index: Int) -> Bool {
+        // 첫 번째 메시지는 항상 날짜 배지 표시
+        guard index > 0 else { return true }
+        
+        let currentDate = Calendar.current.startOfDay(for: message.createdAt)
+        let previousDate = Calendar.current.startOfDay(for: messages[index - 1].createdAt)
+        
+        // 이전 메시지와 다른 날짜인 경우 배지 표시
+        return !Calendar.current.isDate(currentDate, inSameDayAs: previousDate)
+    }
+    
+    func shouldShowGuestChange(for message: ChatEntity, at index: Int) -> (from: GuestType?, to: GuestType)? {
+        // AI 메시지가 아니면 게스트 변경 없음
+        guard !message.user.isCurrentUser, let currentGuest = message.user.guestType else { return nil }
+        
+        // 이전 AI 메시지의 게스트 타입 찾기
+        var previousAIGuest: GuestType? = nil
+        for i in (0..<index).reversed() {
+            let prevMessage = messages[i]
+            if !prevMessage.user.isCurrentUser, let guestType = prevMessage.user.guestType {
+                previousAIGuest = guestType
+                break
+            }
+        }
+        
+        // 이전 AI 게스트와 다른 경우에만 변경 알림 표시
+        if let prevGuest = previousAIGuest, prevGuest != currentGuest {
+            return (from: prevGuest, to: currentGuest)
+        }
+        
+        return nil
     }
     
     // MARK: - Error Handling

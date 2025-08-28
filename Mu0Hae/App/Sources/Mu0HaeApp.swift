@@ -13,7 +13,7 @@ struct Mu0HaeApp: App {
     
     var body: some Scene {
         WindowGroup {
-            CoordinatorView()
+            RootView()
                 .inject(container)
         }
     }
@@ -27,7 +27,7 @@ struct RootView: View {
             if showSplash {
                 SplashView()
             } else {
-                ChatView()
+                CoordinatorView()
             }
         }
         .onAppear {

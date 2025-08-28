@@ -41,7 +41,10 @@ struct GuestDescriptionPopup: View {
                     GuestSelectionButton(title: "설정하기",
                                          fontColor: .muBackground,
                                          backgroundColor: .muPrimary,
-                                         action: { viewModel.hidePopup() } )
+                                         action: {
+                        viewModel.hidePopup()
+                        viewModel.saveCurrentGuest()
+                    } )
                 }
             }
             .padding(.horizontal, 20)

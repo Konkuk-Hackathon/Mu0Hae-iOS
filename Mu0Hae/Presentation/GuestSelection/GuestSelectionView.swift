@@ -55,6 +55,7 @@ struct GuestSelectionView: View {
             Task {
                 await viewModel.fetchGuests()
             }
+            viewModel.loadCurrentGuest()
         }
     }
 }

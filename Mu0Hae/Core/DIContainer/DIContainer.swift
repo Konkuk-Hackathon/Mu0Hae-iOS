@@ -59,7 +59,8 @@ extension DIContainer {
         
         init(repositories: Repositories) {
             self.chat = DefaultChatUseCase(chatRepository: repositories.chat)
-            self.chatHistory = DefaultChatHistoryUseCase(repository: repositories.chatHistory)
+            // TODO: 테스트를 위한 MockHistory 생성
+            self.chatHistory = MockChatHistoryUseCase()
         }
     }
     

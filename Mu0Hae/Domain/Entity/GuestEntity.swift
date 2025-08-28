@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// TODO: GuestType과 통합
 enum GuestEntity: CaseIterable {
     case ybj
     case key

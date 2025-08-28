@@ -9,6 +9,7 @@ import SwiftUI
 
 @Observable
 final class GuestSelectionViewModel {
+    private let userDefaultsService = UserDefaultsService()
     let guestUseCase: GuestUseCase
     
     var guestList: [GuestEntity] = []
@@ -38,6 +39,24 @@ final class GuestSelectionViewModel {
             print("🎉 게스트 목록 불러오기 성공:", guests)
         } catch {
             print("❌ 게스트 목록 불러오기 실패:", error.localizedDescription)
+        }
+    }
+    
+    func saveCurrentGuest() {
+        userDefaultsService.save(value: selectedGuest.rawValue, key: .currentGuest)
+    }
+    
+    func loadCurrentGuest() {
+        switch userDefaultsService.load(type: String.self, key: .currentGuest) {
+        case .success(let guest):
+            if let guestType = GuestType(rawValue: guest) {
+                selectedGuest = guestType
+                print("📥 저장된 채팅 상대 불러오기:", guestType)
+            } else {
+                print("❌ 저장된 값과 매칭되는 GuestType 없음:", guest)
+            }
+        case .failure(let error):
+            print("❌ 불러오기 실패:", error)
         }
     }
 }

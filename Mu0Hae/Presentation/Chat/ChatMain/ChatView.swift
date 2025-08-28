@@ -101,6 +101,7 @@ struct ChatView: View {
             }
             .onAppear {
                 viewModel.loadChatHistoryOnce(container: injected)
+                viewModel.loadCurrentGuest()
             }
         }
     }

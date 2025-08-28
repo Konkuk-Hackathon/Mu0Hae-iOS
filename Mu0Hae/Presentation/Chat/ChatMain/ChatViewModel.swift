@@ -23,6 +23,8 @@ final class ChatViewModel: ObservableObject {
     private let chatUseCase: ChatUseCase
     private var cancellables = Set<AnyCancellable>()
     
+    private let userDefaultsService = UserDefaultsService()
+    
     init(chatUseCase: ChatUseCase, conversationId: String = "") {
         self.chatUseCase = chatUseCase
         self.conversationId = conversationId
@@ -145,6 +147,20 @@ final class ChatViewModel: ObservableObject {
     // MARK: - Error Handling
     func clearError() {
         errorMessage = nil
+    }
+    
+    func loadCurrentGuest() {
+        switch userDefaultsService.load(type: String.self, key: .currentGuest) {
+        case .success(let guest):
+            if let guestType = GuestType(rawValue: guest) {
+                selectedGuestType = guestType
+                print("📥 저장된 채팅 상대 불러오기:", guestType)
+            } else {
+                print("❌ 저장된 값과 매칭되는 GuestType 없음:", guest)
+            }
+        case .failure(let error):
+            print("❌ 불러오기 실패:", error)
+        }
     }
 }
 

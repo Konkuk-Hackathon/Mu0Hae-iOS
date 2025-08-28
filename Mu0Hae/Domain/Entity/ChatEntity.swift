@@ -44,8 +44,8 @@ public enum GuestType: String, Hashable, Sendable {
         switch self {
         case .ubyung: Image(.ybj)
         case .key: Image(.key)
-        case .baekhyun: Image(.key)
-        case .jaesuk: Image(.ybj)
+        case .baekhyun: Image(.baekhyun)
+        case .jaesuk: Image(.jaesuk)
         }
     }
     

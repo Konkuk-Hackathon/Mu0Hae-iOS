@@ -6,10 +6,14 @@
 //
 
 import SwiftUI
+import AVFAudio
 
 struct AIMessageView: View {
     let message: ChatEntity
-    @State private var isPlaying: Bool = false
+    
+    @StateObject private var viewModel = TTSViewModel()
+    
+    @State var isPlaying: Bool = false
     @State private var animationPhase = 0
     
     var isLoading: Bool {
@@ -22,7 +26,7 @@ struct AIMessageView: View {
                 guestType.image
                     .resizable()
                     .frame(width: 46, height: 46)
-                    .accessibilityLabel("\(message.user.guestType.rawValue) 프로필 사진")
+                    .accessibilityLabel("\(message.user.guestType!.displayName) 프로필 사진")
                     .accessibilityHidden(true)
             }
             
@@ -69,12 +73,24 @@ struct AIMessageView: View {
                     // Speaker Button (only show when not loading)
                     if !isLoading {
                         Button {
-                            // TODO: TTS
                             isPlaying.toggle()
+                            // TODO: speakerId 대이터 연결 필요
+                            Task {
+                                await viewModel.fetchAndPlay(text: message.text,
+                                                             speakerId: "key")
+                            }
+                            
                         } label: {
-                            Image(.icSpeaker)
-                                .foregroundColor(.muSubText)
-                                .padding(4)
+                            if viewModel.isLoading {
+                                ProgressView()
+                                    .progressViewStyle(CircularProgressViewStyle())
+                                    .frame(width: 20, height: 20)
+                                    .padding(4)
+                            } else {
+                                Image(.icSpeaker)
+                                    .foregroundColor(.muSubText)
+                                    .padding(4)
+                            }
                         }
                         .accessibilityLabel(isPlaying ? "음성 재생 중지" : "음성으로 듣기")
                         .accessibilityHint(isPlaying ? "탭하여 음성 재생을 중지합니다" : "탭하여 메시지를 음성으로 들을 수 있습니다")
@@ -95,14 +111,4 @@ struct AIMessageView: View {
             }
         }
     }
-}
-
-#Preview {
-    let sampleUser = MessageUser(name: "유병재", isCurrentUser: false, guestType: .ubyung)
-    let sampleMessage = ChatEntity(
-        user: sampleUser,
-        text: "안녕하세요! 오늘 기분은 어떠세요? 제 이름은 박성근이에요. 오늘 하루동안 이걸 만드느라 정신이 많이 없네요 츠하하하하"
-    )
-    
-    AIMessageView(message: sampleMessage)
 }

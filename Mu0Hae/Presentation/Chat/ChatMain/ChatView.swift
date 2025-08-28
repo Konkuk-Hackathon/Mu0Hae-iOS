@@ -85,27 +85,6 @@ struct ChatView: View {
             .onTapGesture {
                 hideKeyboard()
             }
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Image("imgTitle")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 80)
-                        .accessibilityLabel("무해 앱 로고")
-                        .accessibilityHidden(true)
-                }
-                
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {
-                        coordiinator.push(.guestSelection)
-                    }) {
-                        Image(systemName: "line.3.horizontal")
-                            .foregroundColor(.primary)
-                    }
-                    .accessibilityLabel("설정 메뉴")
-                    .accessibilityHint("탭하여 대화 상대를 변경할 수 있습니다")
-                }
-            }
             .onAppear {
                 viewModel.loadChatHistoryOnce(container: injected)
             }
@@ -130,8 +109,10 @@ private struct ChatNavigationBarView: View {
             Spacer()
             
             Image(.icHamburger)
+                .resizable()
                 .renderingMode(.template)
                 .foregroundStyle(.muText)
+                .frame(width: 40, height: 40)
                 .onTapGesture {
                     coordiinator.push(.guestSelection)
                 }

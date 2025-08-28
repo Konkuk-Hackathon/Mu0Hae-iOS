@@ -14,11 +14,7 @@ struct GuestChangeNotificationView: View {
     var body: some View {
         Text("대화 상대를 \(to.displayName)님으로 변경하였습니다.")
             .muFont(.body3)
-            .foregroundColor(Color("muSubText"))
-            .padding(.horizontal, 12)
-            .padding(.vertical, 4)
-            .background(Color("muLightGray"))
-            .cornerRadius(12)
+            .foregroundColor(Color.muSubText)
             .accessibilityLabel("대화 상대 변경 알림")
             .accessibilityValue("대화 상대를 \(to.displayName)님으로 변경하였습니다")
     }

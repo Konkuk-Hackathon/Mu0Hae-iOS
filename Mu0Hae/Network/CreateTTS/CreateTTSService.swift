@@ -57,7 +57,7 @@ final class TTSViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var audioPlayer: AVAudioPlayer?
 
-    private let service = TTSService()
+    private let service = CreateTTSService()
 
     func fetchAndPlay(text: String, speakerId: String) async {
             isLoading = true

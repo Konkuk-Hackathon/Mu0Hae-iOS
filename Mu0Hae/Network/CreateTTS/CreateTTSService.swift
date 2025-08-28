@@ -9,12 +9,20 @@ import Foundation
 import AVFAudio
 
 class CreateTTSService {
+    static let shared = CreateTTSService()
+    private init() {}
+    
     private let baseURL = "https://0a268486d693.ngrok-free.app/tts"
     private let session = URLSession.shared
+    private var currentDataTask: URLSessionDataTask?
     
     func requestTTS(text: String,
                     speakerId: String,
                     speed: Double = 1.0) async throws -> Data {
+        
+        // 이전 요청 취소
+        currentDataTask?.cancel()
+        
         var request = URLRequest(url: URL(string: baseURL)!)
         request.httpMethod = "POST"
         
@@ -37,17 +45,36 @@ class CreateTTSService {
         body.append("--\(boundary)--\r\n".data(using: .utf8)!)
         request.httpBody = body
         
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
-            throw URLError(.badServerResponse)
-        }
-        
-        if httpResponse.statusCode == 200 {
-            return data
-        } else {
-            let errorString = String(data: data, encoding: .utf8) ?? "알 수 없는 오류"
-            throw NSError(domain: "TTS API", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: errorString])
+        return try await withCheckedThrowingContinuation { continuation in
+            let dataTask = URLSession.shared.dataTask(with: request) { [weak self] data, response, error in
+                defer { self?.currentDataTask = nil }
+                
+                if let error = error {
+                    if (error as NSError).code == NSURLErrorCancelled {
+                        continuation.resume(throwing: CancellationError())
+                    } else {
+                        continuation.resume(throwing: error)
+                    }
+                    return
+                }
+                
+                guard let data = data,
+                      let httpResponse = response as? HTTPURLResponse else {
+                    continuation.resume(throwing: URLError(.badServerResponse))
+                    return
+                }
+                
+                if httpResponse.statusCode == 200 {
+                    continuation.resume(returning: data)
+                } else {
+                    let errorString = String(data: data, encoding: .utf8) ?? "알 수 없는 오류"
+                    let error = NSError(domain: "TTS API", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: errorString])
+                    continuation.resume(throwing: error)
+                }
+            }
+            
+            self.currentDataTask = dataTask
+            dataTask.resume()
         }
     }
 }
@@ -57,33 +84,60 @@ final class TTSViewModel: NSObject, ObservableObject {
     @Published var isLoading = false
     @Published var audioPlayer: AVAudioPlayer?
     
-    private let service = CreateTTSService()
+    private let service = CreateTTSService.shared
     private var currentFileURL: URL?
+    private var currentTask: Task<Void, Never>?
+    
+    static private var globalCurrentTask: Task<Void, Never>?
     
     func fetchAndPlay(text: String, speakerId: String) async {
-        do {
-            isLoading = true
-            defer {
-                isLoading = false
+        Self.globalCurrentTask?.cancel()
+        
+        let task = Task {
+            do {
+                isLoading = true
+                defer {
+                    isLoading = false
+                }
+                
+                let wavData = try await service.requestTTS(text: text, speakerId: speakerId)
+                
+                guard !Task.isCancelled else {
+                    print("🚫 TTS 작업이 취소됨")
+                    return
+                }
+
+                let fileURL = FileManager.default.temporaryDirectory
+                    .appendingPathComponent("tts_\(UUID().uuidString).wav")
+
+                try wavData.write(to: fileURL)
+
+                if FileManager.default.fileExists(atPath: fileURL.path) {
+                    print("✅ wav 파일 저장 성공: \(fileURL.path)")
+                    let size = (try? Data(contentsOf: fileURL).count) ?? 0
+                } else {
+                    print("❌ wav 파일 저장 실패")
+                }
+
+                guard !Task.isCancelled else {
+                    try? FileManager.default.removeItem(at: fileURL)
+                    print("🚫 TTS 작업이 취소됨 - 파일 삭제")
+                    return
+                }
+
+                await AudioPlayerManager.shared.playAudio(from: fileURL)
+            } catch {
+                if error is CancellationError {
+                    print("🚫 TTS 작업이 취소됨")
+                } else {
+                    print("❌ TTS 실패:", error.localizedDescription)
+                }
             }
-            let wavData = try await service.requestTTS(text: text, speakerId: speakerId)
-
-            let fileURL = FileManager.default.temporaryDirectory
-                .appendingPathComponent("tts.wav")
-
-            try wavData.write(to: fileURL)
-
-            if FileManager.default.fileExists(atPath: fileURL.path) {
-                print("✅ wav 파일 저장 성공: \(fileURL.path)")
-                let size = (try? Data(contentsOf: fileURL).count) ?? 0
-            } else {
-                print("❌ wav 파일 저장 실패")
-            }
-
-            await AudioPlayerManager.shared.playAudio(from: fileURL)
-        } catch {
-            print("❌ TTS 실패:", error.localizedDescription)
         }
+        
+        Self.globalCurrentTask = task
+        currentTask = task
+        await task.value
     }
 
     

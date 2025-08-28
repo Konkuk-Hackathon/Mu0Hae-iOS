@@ -15,6 +15,7 @@ struct ChatInputView: View {
     
     let chatViewModel: ChatViewModel
     @State private var cancellables = Set<AnyCancellable>()
+    @State private var hasSetupBindings = false
     
     init(chatViewModel: ChatViewModel) {
         self.chatViewModel = chatViewModel
@@ -39,9 +40,9 @@ struct ChatInputView: View {
                 Button {
                     viewModel.toggleRecording()
                 } label: {
-                    Image(viewModel.isRecording ? .icMic : .icMic)
-                        .renderingMode(.template)
-                        .foregroundColor(.muPrimary)
+                    Image(viewModel.isRecording ? .icMic : .icMicFilled)
+                        .resizable()
+                        .frame(width: 28, height: 28)
                 }
                 .accessibilityLabel(viewModel.isRecording ? "녹음 중지" : "음성 녹음 시작")
                 .accessibilityHint(viewModel.isRecording ? "탭하여 음성 녹음을 중지합니다" : "탭하여 음성으로 메시지를 입력할 수 있습니다")
@@ -91,11 +92,16 @@ struct ChatInputView: View {
             y: -2
         )
         .onAppear {
-            setupBindings()
+            if !hasSetupBindings {
+                setupBindings()
+                hasSetupBindings = true
+            }
         }
     }
     
     private func setupBindings() {
+        cancellables.removeAll()
+        
         viewModel.sendMessagePublisher
             .flatMap { message -> AnyPublisher<Void, Never> in
                 self.chatViewModel.sendMessage(message)

@@ -18,7 +18,7 @@ class CreateTTSService {
     
     func requestTTS(text: String,
                     speakerId: String,
-                    speed: Double = 1.0) async throws -> Data {
+                    speed: Double = 1.4) async throws -> Data {
         
         // 이전 요청 취소
         currentDataTask?.cancel()
